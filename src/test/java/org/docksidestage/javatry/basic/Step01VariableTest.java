@@ -24,7 +24,7 @@ import org.docksidestage.unit.PlainTestCase;
  * Operate exercise as javadoc. If it's question style, write your answer before test execution. <br>
  * (javadocの通りにエクササイズを実施。質問形式の場合はテストを実行する前に考えて答えを書いてみましょう)
  * @author jflute
- * @author your_name_here
+ * @author yugo-kojima-biz
  */
 public class Step01VariableTest extends PlainTestCase {
 
@@ -47,7 +47,37 @@ public class Step01VariableTest extends PlainTestCase {
         String piari = null;
         String dstore = "mai";
         sea = sea + land + piari + ":" + dstore;
-        log(sea); // your answer? => 
+        log(sea); // your answer? => mystic8null:mai(o)
+        // MTGの時にチラッと見えてnullがそのまま文字列になるという知見を得た
+        // 以下java初学者用備忘録
+        // ①関数？メソッド？
+        // このページ中のこれ以降のメソッドについてStep01VariableTestクラスの中にあると言える。
+        // なのでこのtest_variable_initial()は**method(メソッド)**である。(この関数の構成はなんだ？と思ったがそういえばclass(クラス)の中にあるので..
+        // "static"がついている(ex: public static void main())とスタティックメソッドと呼ぶ
+        // 今回は"ない"のでこれは**インスタンスメソッド**である
+        // public...：外から呼び出し可能の意
+        //
+        // ②"... extends PlainTestCase"とは...
+        // pythonにもあるクラス継承(あまり使ったことがない...)
+        // ../../unit/PlainTestCaseにある"PlainTestCase"の一種であるというキーワード
+        // 簡単に...すでにあるクラスの機能を使って新しいクラスを作ること
+        // 今回だと...**log()**メソッドの呼び出し？
+        // 特徴：
+        // ・単一継承→一個まで(pythonは複数継承可能)
+        // ・実装自体の再利用→オーバライド(上書き)可能
+        // ・共通の振る舞いや状態の共有
+        //
+        // ③PlainTestCase自体の定義について
+        // "public abstract class PlainTestCase extends TestCase {"
+        // public...：外から呼び出し可能の意
+        // abstract class...：抽象クラスであるということ
+        // ...extends TestCase：また継承している
+        //
+        // TestCaseについて
+        // ・JUnit (Java) や PHPUnit (PHP) などのフレームワークにおいて、テストクラスを作成する際の最も一般的な構文
+        // ・"import junit.framework.TestCase;"で使用可能
+        // ④→書き途中です
+
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -56,7 +86,8 @@ public class Step01VariableTest extends PlainTestCase {
         String land = "oneman";
         sea = land;
         land = land + "'s dreams";
-        log(sea); // your answer? => 
+        log(sea); // your answer? => oneman(o)
+        // 代入の感覚で
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -65,7 +96,8 @@ public class Step01VariableTest extends PlainTestCase {
         int land = 415;
         sea = land;
         land++;
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 415(o)
+        // 値が独立していると判断
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -75,7 +107,16 @@ public class Step01VariableTest extends PlainTestCase {
         sea = land;
         sea = land.add(new BigDecimal(1));
         sea.add(new BigDecimal(1));
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 417(x)
+        // int は値そのもの
+        // BigDecimal はオブジェクト
+        // land.add(new BigDecimal(1)) は、
+        // land に 1 を足した結果を作る
+        // かつBigDecimal は immutable（不変）
+        //
+        // sea.add(new BigDecimal(1)) は、
+        // sea に 1 を足した結果の新しい BigDecimal を返す
+        // でも、その返り値をどこにも代入していない
     }
 
     // ===================================================================================
@@ -89,7 +130,11 @@ public class Step01VariableTest extends PlainTestCase {
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_variable_instance_variable_default_String() {
         String sea = instanceBroadway;
-        log(sea); // your answer? => 
+        log(sea); // your answer? => instanceBroadway(x)
+        // String piari = null;
+        // みたいになると思った
+        // private String instanceBroadway;
+        // という宣言？が上にあって暗黙的に？nullがデフォルトで入っている？
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
