@@ -64,6 +64,9 @@ public class Step01VariableTest extends PlainTestCase {
         // 今回だと...**log()**メソッドの呼び出し？
         // 特徴：
         // ・単一継承→一個まで(pythonは複数継承可能)
+        // TODO kojima Javaが単一継承なのはDiamond Problemが起こらないようにするためです。（興味あれば以下のWiki参考になると思います）
+        //   https://ja.wikipedia.org/wiki/%E8%8F%B1%E5%BD%A2%E7%B6%99%E6%89%BF%E5%95%8F%E9%A1%8C (AIに聞いた方がわかりやすいかも)
+        //   PythonはC3 Linearizationというアルゴリズムを使って以上の問題を解決しているみたいですね。（JavaとPythonの思想の違いが出ていて面白い）
         // ・実装自体の再利用→オーバライド(上書き)可能
         // ・共通の振る舞いや状態の共有
         //
@@ -117,6 +120,9 @@ public class Step01VariableTest extends PlainTestCase {
         // sea.add(new BigDecimal(1)) は、
         // sea に 1 を足した結果の新しい BigDecimal を返す
         // でも、その返り値をどこにも代入していない
+        // TODO kojima immutableという概念がでてきたの素晴らしいと思います！
+        //   Primitive型とObject型は変数で保持しているものが違うので注意ですね。
+        //   https://qiita.com/pike3/items/4401f4f652871546cedd
     }
 
     // ===================================================================================
@@ -135,6 +141,7 @@ public class Step01VariableTest extends PlainTestCase {
         // みたいになると思った
         // private String instanceBroadway;
         // という宣言？が上にあって暗黙的に？nullがデフォルトで入っている？
+        // TODO kojima 合ってます！変数を宣言したけど、初期化していないのでどのメモリアドレスも参照していない状態、つまりnullになっています。
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
