@@ -49,6 +49,7 @@ public class Step01VariableTest extends PlainTestCase {
         sea = sea + land + piari + ":" + dstore;
         log(sea); // your answer? => mystic8null:mai(o)
         // MTGの時にチラッと見えてnullがそのまま文字列になるという知見を得た
+        // TODO kojima ああ、見えちゃった苦笑。ごめんなさい by jflute (2026/07/16)
         // 以下java初学者用備忘録
         // ①関数？メソッド？
         // このページ中のこれ以降のメソッドについてStep01VariableTestクラスの中にあると言える。
@@ -56,6 +57,8 @@ public class Step01VariableTest extends PlainTestCase {
         // "static"がついている(ex: public static void main())とスタティックメソッドと呼ぶ
         // 今回は"ない"のでこれは**インスタンスメソッド**である
         // public...：外から呼び出し可能の意
+        // TODO kojima [ふぉろー] 一応Java的には、オブジェクト指向の「振る舞い」をメソッドという言葉で表現しています by jflute (2026/07/16)
+        // でもまあ、関数とメソッドという言葉は、昨今入り乱れてる印象ですね。ぼくも入り乱れます(^^。
         //
         // ②"... extends PlainTestCase"とは...
         // pythonにもあるクラス継承(あまり使ったことがない...)
@@ -64,7 +67,7 @@ public class Step01VariableTest extends PlainTestCase {
         // 今回だと...**log()**メソッドの呼び出し？
         // 特徴：
         // ・単一継承→一個まで(pythonは複数継承可能)
-        // TODO kojima Javaが単一継承なのはDiamond Problemが起こらないようにするためです。（興味あれば以下のWiki参考になると思います）
+        // TODO kojima Javaが単一継承なのはDiamond Problemが起こらないようにするためです。（興味あれば以下のWiki参考になると思います） by noniwa
         //   https://ja.wikipedia.org/wiki/%E8%8F%B1%E5%BD%A2%E7%B6%99%E6%89%BF%E5%95%8F%E9%A1%8C (AIに聞いた方がわかりやすいかも)
         //   PythonはC3 Linearizationというアルゴリズムを使って以上の問題を解決しているみたいですね。（JavaとPythonの思想の違いが出ていて面白い）
         // ・実装自体の再利用→オーバライド(上書き)可能
@@ -80,7 +83,8 @@ public class Step01VariableTest extends PlainTestCase {
         // ・JUnit (Java) や PHPUnit (PHP) などのフレームワークにおいて、テストクラスを作成する際の最も一般的な構文
         // ・"import junit.framework.TestCase;"で使用可能
         // ④→書き途中です
-
+        // TODO kojima [いいね] 仕組みのところまで追求してるの素晴らしい(^^ by jflute (2026/07/16)
+        // 1on1のときに気になったところあれば聞いてくれればお話ししますー。
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -101,6 +105,7 @@ public class Step01VariableTest extends PlainTestCase {
         land++;
         log(sea); // your answer? => 415(o)
         // 値が独立していると判断
+        // TODO kojima [いいね] プリミティブ型は値そのものが変数の中に入ってると考えて良いです by jflute (2026/07/16)
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -120,9 +125,14 @@ public class Step01VariableTest extends PlainTestCase {
         // sea.add(new BigDecimal(1)) は、
         // sea に 1 を足した結果の新しい BigDecimal を返す
         // でも、その返り値をどこにも代入していない
-        // TODO kojima immutableという概念がでてきたの素晴らしいと思います！
+        // TODO kojima immutableという概念がでてきたの素晴らしいと思います！ by noniwa
         //   Primitive型とObject型は変数で保持しているものが違うので注意ですね。
         //   https://qiita.com/pike3/items/4401f4f652871546cedd
+
+        // TODO kojima [いいね] 分析しっかりできています by jflute (2026/07/16)
+
+        // TODO jflute 1on1にてimmutableじっくりフォロー予定、add()のコードも読みたい (2026/07/16)
+        // ↑これはくぼ用の備忘録とぅどぅなのでそのままでOKです
     }
 
     // ===================================================================================
@@ -141,7 +151,7 @@ public class Step01VariableTest extends PlainTestCase {
         // みたいになると思った
         // private String instanceBroadway;
         // という宣言？が上にあって暗黙的に？nullがデフォルトで入っている？
-        // TODO kojima 合ってます！変数を宣言したけど、初期化していないのでどのメモリアドレスも参照していない状態、つまりnullになっています。
+        // TODO kojima 合ってます！変数を宣言したけど、初期化していないのでどのメモリアドレスも参照していない状態、つまりnullになっています。 by noniwa
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
