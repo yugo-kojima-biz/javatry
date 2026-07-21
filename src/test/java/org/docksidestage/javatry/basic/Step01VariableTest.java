@@ -49,7 +49,7 @@ public class Step01VariableTest extends PlainTestCase {
         sea = sea + land + piari + ":" + dstore;
         log(sea); // your answer? => mystic8null:mai(o)
         // MTGの時にチラッと見えてnullがそのまま文字列になるという知見を得た
-        // TODO kojima ああ、見えちゃった苦笑。ごめんなさい by jflute (2026/07/16)
+        // done kojima ああ、見えちゃった苦笑。ごめんなさい by jflute (2026/07/16)
         // 以下java初学者用備忘録
         // ①関数？メソッド？
         // このページ中のこれ以降のメソッドについてStep01VariableTestクラスの中にあると言える。
@@ -57,8 +57,15 @@ public class Step01VariableTest extends PlainTestCase {
         // "static"がついている(ex: public static void main())とスタティックメソッドと呼ぶ
         // 今回は"ない"のでこれは**インスタンスメソッド**である
         // public...：外から呼び出し可能の意
-        // TODO kojima [ふぉろー] 一応Java的には、オブジェクト指向の「振る舞い」をメソッドという言葉で表現しています by jflute (2026/07/16)
+        // done kojima [ふぉろー] 一応Java的には、オブジェクト指向の「振る舞い」をメソッドという言葉で表現しています by jflute (2026/07/16)
         // でもまあ、関数とメソッドという言葉は、昨今入り乱れてる印象ですね。ぼくも入り乱れます(^^。
+        // #1on1: 一方で、関数というと、純粋に引数と戻り値だけの世界の振る舞いのことを指すこともある。 (2026/07/21)
+        // 言語によって、その厳密性が変わってくる可能性はあります。
+        //
+        // Javaの世界の中で、純粋な関数に近いのが staticメソッドと言えるかも。
+        // (C言語の名残、手続き型プログラミングの感覚を文法として残した)
+        // (Kotlinでは、staticメソッドはない。代わりにCompanionObjectがある)
+        //
         //
         // ②"... extends PlainTestCase"とは...
         // pythonにもあるクラス継承(あまり使ったことがない...)
@@ -67,7 +74,7 @@ public class Step01VariableTest extends PlainTestCase {
         // 今回だと...**log()**メソッドの呼び出し？
         // 特徴：
         // ・単一継承→一個まで(pythonは複数継承可能)
-        // TODO kojima Javaが単一継承なのはDiamond Problemが起こらないようにするためです。（興味あれば以下のWiki参考になると思います） by noniwa
+        // TODO done kojima Javaが単一継承なのはDiamond Problemが起こらないようにするためです。（興味あれば以下のWiki参考になると思います） by noniwa
         //   https://ja.wikipedia.org/wiki/%E8%8F%B1%E5%BD%A2%E7%B6%99%E6%89%BF%E5%95%8F%E9%A1%8C (AIに聞いた方がわかりやすいかも)
         //   PythonはC3 Linearizationというアルゴリズムを使って以上の問題を解決しているみたいですね。（JavaとPythonの思想の違いが出ていて面白い）
         // ・実装自体の再利用→オーバライド(上書き)可能
@@ -83,18 +90,38 @@ public class Step01VariableTest extends PlainTestCase {
         // ・JUnit (Java) や PHPUnit (PHP) などのフレームワークにおいて、テストクラスを作成する際の最も一般的な構文
         // ・"import junit.framework.TestCase;"で使用可能
         // ④→書き途中です
-        // TODO kojima [いいね] 仕組みのところまで追求してるの素晴らしい(^^ by jflute (2026/07/16)
+        // done kojima [いいね] 仕組みのところまで追求してるの素晴らしい(^^ by jflute (2026/07/16)
         // 1on1のときに気になったところあれば聞いてくれればお話ししますー。
+        // #1on1: オブジェクト指向の話は、ちょうどstep6でがっつりやりますのでお楽しみに。 (2026/07/21)
+
+        // #1on1: nullが文字列連携されたときに、"null"ってなるのか空文字になるのか？ (2026/07/21)
+        // 言語の決めの問題。Javaが "null" って表現するって決めただけ、C#は空文字になる。
+        // 一応メリデメ:
+        // Javaの場合、画面やメール文言に "null" で表示されやすい問題がある。
+        // 一方で、画面やログとかで "null" って出てくるので、開発時は不具合を見つけやすい。
+        // どっちもどっち。
+        // 些細なことだけど、こうやってメリデメを考える習慣自体が大事。
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_variable_reassigned_basic() {
-        String sea = "mystic";
-        String land = "oneman";
-        sea = land;
-        land = land + "'s dreams";
+        String sea = "mystic"; // "mystic"インスタンスがnewされて、アドレスがseaに (1丁目1番地)
+        String land = "oneman"; // "oneman"インスタンスがnewされて、アドレスがlandに (2丁目2番地)
+        sea = land; // seaの1丁目1番地の紙を破棄して、landの2丁目2番地の紙をコピーする
+        // この瞬間、seaとlandが同じインスタンスを指し示すことになる。
+        land = land + "'s dreams"; // "'s dreams"で3丁目3番地、"oneman's dreams"で4丁目4番地
+        // "'s dreams"は変数で受け取ってないので、中間成果物インスタンスみたいなイメージ。
         log(sea); // your answer? => oneman(o)
         // 代入の感覚で
+
+        // #1on1: インスタンスとは？ (2026/07/21)
+        // 学生時代、インスタンスという言葉、使っていたはず... by こじまさん
+        // ここでは、4つのStringインスタンスがnewされて存在している。
+        // インスタンスに注目してプログラムを見ていってほしい。
+
+        // #1on1: 変数とは？変数のインスタンスの関係性 (2026/07/21)
+        // "代入の感覚で" は sea = land; のところだった。
+        // 1行1行辿ってみた。
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -105,7 +132,8 @@ public class Step01VariableTest extends PlainTestCase {
         land++;
         log(sea); // your answer? => 415(o)
         // 値が独立していると判断
-        // TODO kojima [いいね] プリミティブ型は値そのものが変数の中に入ってると考えて良いです by jflute (2026/07/16)
+        // done kojima [いいね] プリミティブ型は値そのものが変数の中に入ってると考えて良いです by jflute (2026/07/16)
+        // 言語によっては、intもオブジェクトだったりするので、ここはJavaならでは (2026/07/21)
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -125,14 +153,17 @@ public class Step01VariableTest extends PlainTestCase {
         // sea.add(new BigDecimal(1)) は、
         // sea に 1 を足した結果の新しい BigDecimal を返す
         // でも、その返り値をどこにも代入していない
-        // TODO kojima immutableという概念がでてきたの素晴らしいと思います！ by noniwa
+        // TODO done kojima immutableという概念がでてきたの素晴らしいと思います！ by noniwa
         //   Primitive型とObject型は変数で保持しているものが違うので注意ですね。
         //   https://qiita.com/pike3/items/4401f4f652871546cedd
 
-        // TODO kojima [いいね] 分析しっかりできています by jflute (2026/07/16)
+        // done kojima [いいね] 分析しっかりできています by jflute (2026/07/16)
 
         // TODO jflute 1on1にてimmutableじっくりフォロー予定、add()のコードも読みたい (2026/07/16)
         // ↑これはくぼ用の備忘録とぅどぅなのでそのままでOKです
+        // #1on1: immutableという言葉が聞いたことあるか？ (2026/07/21)
+        // プログラミング以外で immutable は聞いたことある。課題とかでimmutableが出てきたような...
+        // まあ次回じっくりimmutableのお話をしますね。
     }
 
     // ===================================================================================
