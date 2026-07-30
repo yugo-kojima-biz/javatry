@@ -74,9 +74,11 @@ public class Step01VariableTest extends PlainTestCase {
         // 今回だと...**log()**メソッドの呼び出し？
         // 特徴：
         // ・単一継承→一個まで(pythonは複数継承可能)
-        // TODO done kojima Javaが単一継承なのはDiamond Problemが起こらないようにするためです。（興味あれば以下のWiki参考になると思います） by noniwa
+        // TODO kojima Javaが単一継承なのはDiamond Problemが起こらないようにするためです。（興味あれば以下のWiki参考になると思います） by noniwa
         //   https://ja.wikipedia.org/wiki/%E8%8F%B1%E5%BD%A2%E7%B6%99%E6%89%BF%E5%95%8F%E9%A1%8C (AIに聞いた方がわかりやすいかも)
         //   PythonはC3 Linearizationというアルゴリズムを使って以上の問題を解決しているみたいですね。（JavaとPythonの思想の違いが出ていて面白い）
+        // → Diamond Problem...初耳です。学びになります...
+        //
         // ・実装自体の再利用→オーバライド(上書き)可能
         // ・共通の振る舞いや状態の共有
         //
@@ -143,7 +145,7 @@ public class Step01VariableTest extends PlainTestCase {
         sea = land;
         sea = land.add(new BigDecimal(1));
         sea.add(new BigDecimal(1));
-        log(sea); // your answer? => 417(x)
+        log(sea); // your answer? => 417(x) => 416(o) // 書き方の統一
         // int は値そのもの
         // BigDecimal はオブジェクト
         // land.add(new BigDecimal(1)) は、
@@ -153,9 +155,10 @@ public class Step01VariableTest extends PlainTestCase {
         // sea.add(new BigDecimal(1)) は、
         // sea に 1 を足した結果の新しい BigDecimal を返す
         // でも、その返り値をどこにも代入していない
-        // TODO done kojima immutableという概念がでてきたの素晴らしいと思います！ by noniwa
+        // TODO kojima immutableという概念がでてきたの素晴らしいと思います！ by noniwa
         //   Primitive型とObject型は変数で保持しているものが違うので注意ですね。
         //   https://qiita.com/pike3/items/4401f4f652871546cedd
+        // 「ポインタ」
 
         // done kojima [いいね] 分析しっかりできています by jflute (2026/07/16)
 
@@ -177,24 +180,50 @@ public class Step01VariableTest extends PlainTestCase {
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_variable_instance_variable_default_String() {
         String sea = instanceBroadway;
-        log(sea); // your answer? => instanceBroadway(x)
+        log(sea); // your answer? => instanceBroadway(x) => null(o) // 書き方の統一
         // String piari = null;
         // みたいになると思った
         // private String instanceBroadway;
         // という宣言？が上にあって暗黙的に？nullがデフォルトで入っている？
         // TODO kojima 合ってます！変数を宣言したけど、初期化していないのでどのメモリアドレスも参照していない状態、つまりnullになっています。 by noniwa
+        // 今回上で宣言されているのはインスタンス変数。そもそも今までのメソッド内で宣言されてたのがローカル変数。
+        // 「デフォルトで入っている」というのも、
+        // インスタンス変数・static変数・配列中の要素には規定の値が入る
+        //
+        // 言い換えればクラス直下に宣言する変数には規定値が入る？
+        // →クラス直下にある変数は基本的にインスタンス変数とスタティック変数という理解？
+        // →メソッド内部にあるのがローカル変数　↔︎ クラス内メソッド外にあるのがインスタンス/スタティック変数？
+        //
+        // class Example{
+        //      int a;        // 0
+        //      static int b; // 0
+        //      String c;     // null
+        //      int[] d;      // null → 配列すら作っていないインスタンス変数 0ではない
+        //      String[] e;   // null → 配列すら作っていないインスタンス変数
+        //      void test() {
+        //        int f = 1;                 // 既定値のままは使えない
+        //        int[] g = new int[3];      // g は自分で代入している. g[0], g[1], g[2] は最初から 0 → [0, 0, 0]
+        //        String[] h = new String[3] // [null, null ,null]
+        //    }
+        //      })
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_variable_instance_variable_default_int() {
         int sea = instanceDockside;
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 0(o)
+        // 今回のインスタンス変数？がintだからデフォルトは0だと思った。
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_variable_instance_variable_default_Integer() {
         Integer sea = instanceHangar;
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 0(x) => null(o)
+        // Integerは参照型、オブジェクト参照　↔︎ intはプリミティブ型(復習)
+        // Integerのデフォルトはnullになる。
+        // nullであるこのaddress自体を指しているというよりかは、参照先がないという意味のnull？
+        // Integer a = 1;
+        // となればこのaが持つaddressが"3"を持ったInteger Objectを参照している？
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -203,13 +232,64 @@ public class Step01VariableTest extends PlainTestCase {
         instanceMagiclamp = "magician";
         helpInstanceVariableViaMethod(instanceMagiclamp);
         String sea = instanceBroadway + "|" + instanceDockside + "|" + instanceHangar + "|" + instanceMagiclamp;
-        log(sea); // your answer? => 
+        log(sea); // your answer? => bigband|1|null|burn(x) => bigband|1|null|magician(o)
+        // magicianだけ変わらなさそうな気もしましたが,根拠がないのでメタ読みはやめました。
+        // 演算の前にインスタンス変数に代入と加算が行われているという考え方 → 多分あってる？
+        // 今回はメソッド内で変更が反映しているのにinstanceMagiclampはそのままの理由について
+        // → 引数としての変更だから：help...ViaMethod(String instanceMagiclamp)
+        //
+        // このhelp...メソッド内でlog(instanceMagiclamp)を最後にやれば"burn"が出力される？→確認
+        // instanceMagiclamp以外はフィールドの変更にあたる
+        //
+        // クラスの構成要素
+        //   ├─ フィールド
+        //   │    ├─ インスタンス変数
+        //   │    └─ static変数
+        //   ├─ メソッド
+        //   ├─ コンストラクタ
+        //   ...
+        // みたいな感じ？
+        //
+        // だから
+        // ①help...メソッドが引数を伴わない場合,void helpInstanceVariableViaMethod(){instanceMagiclamp = "burn";}
+        // → だとburnになる
+        // ②未定義(instanceMagiclamp = "magician";の行を消す)ならそのまま
+        // → bigband|1|null|nullになる
+        //
+        //
+        // "private"とは？
+        // → クラスの中からでしか触れない ↔︎ "public"
+        // "public"ってそもそもなんだっけ？ → 外から呼び出し可能(再掲)
+        // "protected"もあるらしい
+        // → そのクラス自身と、継承したクラスから使用可能
+        //
+        // だから
+        // Step01VariableTest Test01 = new Step01VariableTest();
+        // Test01.instanceMagiclamp = "abc"; // NG
+        //
+        // Q. "private"に触る"public"メソッドなら間接的に行ける？
+        // public class Step01VariableTest extends PlainTestCase {
+        //
+        //    private String instanceMagiclamp;
+        //
+        //    public void setInstanceMagiclamp(String str) {
+        //        this.instanceMagiclamp = str;
+        //    }
+        // }
+        //
+        // Step01VariableTest Test01 = new Step01VariableTest();
+        // Test01.setInstanceMagiclamp("abc"); →触れる？
+        //
+        // Q. "this"って？
+        // A. コード実行中のクラスオブジェクトインスタンス全体？
+
     }
 
     private void helpInstanceVariableViaMethod(String instanceMagiclamp) {
         instanceBroadway = "bigband";
         ++instanceDockside;
         instanceMagiclamp = "burn";
+//        log(instanceMagiclamp);
     }
 
     // ===================================================================================
@@ -223,7 +303,8 @@ public class Step01VariableTest extends PlainTestCase {
         String sea = "harbor";
         int land = 415;
         helpMethodArgumentImmutableMethodcall(sea, land);
-        log(sea); // your answer? => 
+        log(sea); // your answer? => harbor(o)
+        // Stringはimmutableだから(小声)
     }
 
     private void helpMethodArgumentImmutableMethodcall(String sea, int land) {
@@ -240,7 +321,10 @@ public class Step01VariableTest extends PlainTestCase {
         StringBuilder sea = new StringBuilder("harbor");
         int land = 415;
         helpMethodArgumentMethodcall(sea, land);
-        log(sea); // your answer? => 
+        log(sea); // your answer? => harbor416(o)
+        // IntelliJでappendをチラ見して"戻り値:a reference to this object"とあったので,変わるのかなと推測
+        // そもそもStringBuilderが"mutable"
+        // String seaに対してsea.appendはできない？
     }
 
     private void helpMethodArgumentMethodcall(StringBuilder sea, int land) {
