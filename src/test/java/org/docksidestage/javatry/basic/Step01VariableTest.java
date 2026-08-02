@@ -206,6 +206,8 @@ public class Step01VariableTest extends PlainTestCase {
         //        String[] h = new String[3] // [null, null ,null]
         //    }
         //      })
+        // TODO kojima [ふぉろー] "クラス直下にある変数" がインスタンス変数 or static変数でOKです by jflute (2026/08/03)
+        // staticが付いてなければインスタンス変数です。
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -224,6 +226,8 @@ public class Step01VariableTest extends PlainTestCase {
         // nullであるこのaddress自体を指しているというよりかは、参照先がないという意味のnull？
         // Integer a = 1;
         // となればこのaが持つaddressが"3"を持ったInteger Objectを参照している？
+        // TODO kojima [ふぉろー] null は "参照先がない" という解釈でOKです。 by jflute (2026/08/03)
+        // 変数という箱自体は存在していても、その中に参照が何も入ってない状態が null という感じで。 
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -283,13 +287,20 @@ public class Step01VariableTest extends PlainTestCase {
         // Q. "this"って？
         // A. コード実行中のクラスオブジェクトインスタンス全体？
 
+        // TODO kojima [ふぉろー] クラスの構成要素Goodです。 by jflute (2026/08/03)
+        // フィールドという言葉もよく使われます。staticも含みますが、staticの変数がレアなので、
+        // フィールドというとインスタンス変数のことを指すように言う方も多いですね。
+        //
+        // publicとprivateも良いですね。
+        // privateは、直接触るのはダメだけど、publicな人を経由して触るのはOKということで。
+        // なので、privateにするだけで絶対に変更できない、というわけではないことに注意ですね。
     }
 
     private void helpInstanceVariableViaMethod(String instanceMagiclamp) {
         instanceBroadway = "bigband";
         ++instanceDockside;
         instanceMagiclamp = "burn";
-//        log(instanceMagiclamp);
+        //        log(instanceMagiclamp);
     }
 
     // ===================================================================================
@@ -305,6 +316,8 @@ public class Step01VariableTest extends PlainTestCase {
         helpMethodArgumentImmutableMethodcall(sea, land);
         log(sea); // your answer? => harbor(o)
         // Stringはimmutableだから(小声)
+        // TODO kojima [いいね] 大声で大丈夫です笑 by jflute (2026/08/03)
+        // TODO jflute 1on1にて、BigDecimalのところimmutableとからめて説明する予定 (2026/08/03)
     }
 
     private void helpMethodArgumentImmutableMethodcall(String sea, int land) {
@@ -325,6 +338,7 @@ public class Step01VariableTest extends PlainTestCase {
         // IntelliJでappendをチラ見して"戻り値:a reference to this object"とあったので,変わるのかなと推測
         // そもそもStringBuilderが"mutable"
         // String seaに対してsea.appendはできない？
+        // TODO kojima [いいね] JavaDoc見る姿勢は素晴らしいです(^^ by jflute (2026/08/03)
     }
 
     private void helpMethodArgumentMethodcall(StringBuilder sea, int land) {
