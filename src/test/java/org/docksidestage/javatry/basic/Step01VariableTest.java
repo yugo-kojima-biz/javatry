@@ -74,10 +74,11 @@ public class Step01VariableTest extends PlainTestCase {
         // 今回だと...**log()**メソッドの呼び出し？
         // 特徴：
         // ・単一継承→一個まで(pythonは複数継承可能)
-        // TODO kojima Javaが単一継承なのはDiamond Problemが起こらないようにするためです。（興味あれば以下のWiki参考になると思います） by noniwa
+        // TODO done kojima Javaが単一継承なのはDiamond Problemが起こらないようにするためです。（興味あれば以下のWiki参考になると思います） by noniwa
         //   https://ja.wikipedia.org/wiki/%E8%8F%B1%E5%BD%A2%E7%B6%99%E6%89%BF%E5%95%8F%E9%A1%8C (AIに聞いた方がわかりやすいかも)
         //   PythonはC3 Linearizationというアルゴリズムを使って以上の問題を解決しているみたいですね。（JavaとPythonの思想の違いが出ていて面白い）
         // → Diamond Problem...初耳です。学びになります...
+        // #1on1: ダイヤモンド継承とかの話に関しては、step6の継承のところでまたしっかり (2026/08/03)
         //
         // ・実装自体の再利用→オーバライド(上書き)可能
         // ・共通の振る舞いや状態の共有
@@ -155,18 +156,63 @@ public class Step01VariableTest extends PlainTestCase {
         // sea.add(new BigDecimal(1)) は、
         // sea に 1 を足した結果の新しい BigDecimal を返す
         // でも、その返り値をどこにも代入していない
-        // TODO kojima immutableという概念がでてきたの素晴らしいと思います！ by noniwa
+        // TODO done kojima immutableという概念がでてきたの素晴らしいと思います！ by noniwa
         //   Primitive型とObject型は変数で保持しているものが違うので注意ですね。
         //   https://qiita.com/pike3/items/4401f4f652871546cedd
         // 「ポインタ」
 
         // done kojima [いいね] 分析しっかりできています by jflute (2026/07/16)
 
-        // TODO jflute 1on1にてimmutableじっくりフォロー予定、add()のコードも読みたい (2026/07/16)
+        // done jflute 1on1にてimmutableじっくりフォロー予定、add()のコードも読みたい (2026/07/16)
         // ↑これはくぼ用の備忘録とぅどぅなのでそのままでOKです
         // #1on1: immutableという言葉が聞いたことあるか？ (2026/07/21)
         // プログラミング以外で immutable は聞いたことある。課題とかでimmutableが出てきたような...
         // まあ次回じっくりimmutableのお話をしますね。
+
+        // #1on1: immutableとは？ (2026/08/03)
+        // immutable (不変な)
+        // o immutableなクラス(インスタンス) // default
+        // o immutableな変数
+        //
+        // BigDecimalのインスタンス変数の例。
+        //
+        // immutableの使い所:
+        // o 本当に変わらないデータに使う
+        // o 変わるデータでも使う (!?) (今回のエクササイズがまさしくそう、add()で足してる)
+        // 
+        // immutableのメリット:
+        // o 安全性 (変えられないから安全だよね)
+        // o 可読性 (変えられないことが保証されてるから、それ前提で読み進めることができる)
+        //  → 本当に変えてないものに関しては、immutableで書いた方が読みやすくなる
+        //    (逆に、変えてないのにmutableで書くと、(読み手が)変えてるかもしれない...つもりで読まないといけない)
+        //
+        // immutableのデメリット:
+        // o 変える時にちょっと面倒!? (add()で戻り値で戻すとか) by こじまさん
+        //   → immutableって少し実装が必要になる
+        //     (何もしなければmutableになるので、immutableを意識した実装しないと)
+        // o 比較的メモリをたくさん使いがち (変わるデータでも使うケースだと)
+        //
+        // その昔は:
+        // o PCのメモリが貧弱だったので、immutableの実装は避けられがち (物理的な制約)
+        // o だんだんインフラが進化してきて、そこまで気にしなくても良くなった
+        // o インフラよりも人間に都合の良い実装を優先するようになってきた
+        //
+        // immutableのバランス:
+        // o Javaだと、感覚値バランス指向で、8:2くらいでimmutable/mutableかな!? by jflute
+        //   (歴史的なところもあるし、言語コンセプトとしてimmutable全推しじゃない)
+        //   (immutableを徹しようとすると、言語の高度な文法サポートが必要になることが多い)
+        //   (mutableでも実装できないわけじゃない。デメリットが顕在化しないような工夫は他にもあるので)
+        //   (安全性や可読性の工夫は、immutableだけってわけじゃない)
+        //   jfluteも、8:2くらいでimmutableにアプローチしつつ、ただ無理はせずmutableも活用する。
+        //   そのとき、mutableのデメリットが顕在化しないような工夫を別の方法でやる。
+        // o 他の言語だと、immutable徹底の文化もある。
+        //
+        // ↓
+        // 言語の文化、組織の文化、個人の好みで、バランスは変わりがち
+        //
+        // ↓
+        // ぜひ、現場のプログラムでもimmutable/mutableの視点で見てみて欲しい。
+        // というか、現場のクラスでimmutableなものを見つけてみて欲しい。
     }
 
     // ===================================================================================
@@ -206,7 +252,7 @@ public class Step01VariableTest extends PlainTestCase {
         //        String[] h = new String[3] // [null, null ,null]
         //    }
         //      })
-        // TODO kojima [ふぉろー] "クラス直下にある変数" がインスタンス変数 or static変数でOKです by jflute (2026/08/03)
+        // done kojima [ふぉろー] "クラス直下にある変数" がインスタンス変数 or static変数でOKです by jflute (2026/08/03)
         // staticが付いてなければインスタンス変数です。
     }
 
@@ -226,7 +272,7 @@ public class Step01VariableTest extends PlainTestCase {
         // nullであるこのaddress自体を指しているというよりかは、参照先がないという意味のnull？
         // Integer a = 1;
         // となればこのaが持つaddressが"3"を持ったInteger Objectを参照している？
-        // TODO kojima [ふぉろー] null は "参照先がない" という解釈でOKです。 by jflute (2026/08/03)
+        // done kojima [ふぉろー] null は "参照先がない" という解釈でOKです。 by jflute (2026/08/03)
         // 変数という箱自体は存在していても、その中に参照が何も入ってない状態が null という感じで。 
     }
 
@@ -294,6 +340,8 @@ public class Step01VariableTest extends PlainTestCase {
         // publicとprivateも良いですね。
         // privateは、直接触るのはダメだけど、publicな人を経由して触るのはOKということで。
         // なので、privateにするだけで絶対に変更できない、というわけではないことに注意ですね。
+
+        // TODO jflute 次回1on1でもう少し踏み込んでみる (2026/08/03)
     }
 
     private void helpInstanceVariableViaMethod(String instanceMagiclamp) {
@@ -316,14 +364,16 @@ public class Step01VariableTest extends PlainTestCase {
         helpMethodArgumentImmutableMethodcall(sea, land);
         log(sea); // your answer? => harbor(o)
         // Stringはimmutableだから(小声)
-        // TODO kojima [いいね] 大声で大丈夫です笑 by jflute (2026/08/03)
-        // TODO jflute 1on1にて、BigDecimalのところimmutableとからめて説明する予定 (2026/08/03)
+        // doneTODO kojima [いいね] 大声で大丈夫です笑 by jflute (2026/08/03)
+        // done jflute 1on1にて、BigDecimalのところimmutableとからめて説明する予定 (2026/08/03)
+        // #1on1: Stringがimmutableだから(byこじまさん)、helpを読まなくても答えがわかる (2026/08/03)
     }
 
     private void helpMethodArgumentImmutableMethodcall(String sea, int land) {
         ++land;
         String landStr = String.valueOf(land); // is "416"
         sea.concat(landStr);
+        // #1on1: concat()のソースコードちょっと読んで、immutableであることを確認 (2026/08/03)
     }
 
     // -----------------------------------------------------
@@ -338,7 +388,14 @@ public class Step01VariableTest extends PlainTestCase {
         // IntelliJでappendをチラ見して"戻り値:a reference to this object"とあったので,変わるのかなと推測
         // そもそもStringBuilderが"mutable"
         // String seaに対してsea.appendはできない？
-        // TODO kojima [いいね] JavaDoc見る姿勢は素晴らしいです(^^ by jflute (2026/08/03)
+        // done kojima [いいね] JavaDoc見る姿勢は素晴らしいです(^^ by jflute (2026/08/03)
+        // #1on1: append()のソースコードも読んでみて、インスタンス変数が書き換わっているのを確認。 (2026/08/03)
+        // #1on1: なんで戻り値で return this; してるの？mutableだからreturnは要らないはず (2026/08/03)
+        // .append().append()というメソッドチェーンをコード上でやりやすくするため
+        //  e.g. sea.append("a").append("b");
+        //
+        // もし、helpの中でappend()してないのに、mutableなStringBuilderで引数で渡すのは可読性的に紛らわしい (2026/08/03)
+        // メソッドないで変えないのであれば、メソッドの引数の型は、immutableなものの方が嬉しい。
     }
 
     private void helpMethodArgumentMethodcall(StringBuilder sea, int land) {
