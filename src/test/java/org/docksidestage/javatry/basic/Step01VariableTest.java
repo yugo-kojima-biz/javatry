@@ -411,7 +411,18 @@ public class Step01VariableTest extends PlainTestCase {
         StringBuilder sea = new StringBuilder("harbor");
         int land = 415;
         helpMethodArgumentVariable(sea, land);
-        log(sea); // your answer? => 
+        log(sea); // your answer? => harbor(o)
+        //
+        // pythonだと：
+        // def helpMethodArgumentVariable(sea):
+        //     sea = ["harbor", 416]
+        //
+        // sea = ["harbor"]
+        // help(sea)
+        // print(sea)
+        //
+        // みたいなもの？だと思って実行。
+        // まだ感覚的にしっくりこないです
     }
 
     private void helpMethodArgumentVariable(StringBuilder sea, int land) {
@@ -439,8 +450,14 @@ public class Step01VariableTest extends PlainTestCase {
      * o すべての変数をlog()でカンマ区切りの文字列で表示
      * </pre>
      */
+    private int piari;
+
     public void test_variable_writing() {
         // define variables here
+        String sea = "mystic";
+        Integer land = null;
+        log(sea +  "," + land + "," + piari);
+
     }
 
     // ===================================================================================
@@ -452,11 +469,22 @@ public class Step01VariableTest extends PlainTestCase {
      * <pre>
      * _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
      * your question here (ここにあなたの質問を):
-     * 
+     * メソッド終了時のseaの中身はなんですか？
+     *
+     * (メソッド引数として渡された変数にメソッド内で再代入したら値は変わるか
+     * 当たり前なはずだが新言語でやるとなぜかピンとこないのでほぼ再掲)
      * _/_/_/_/_/_/_/_/_/_/
      * </pre>
      */
     public void test_variable_yourExercise() {
         // write your code here
+        StringBuilder sea = new StringBuilder("mystic");
+        helpMyMethod(sea);
+        log(sea);
+    }
+    private void helpMyMethod(StringBuilder sea)
+    {
+        String seaStr = sea.toString();
+        sea = new StringBuilder(seaStr).append(" is changed");
     }
 }

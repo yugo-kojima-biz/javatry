@@ -52,7 +52,8 @@ public class Step02IfForTest extends PlainTestCase {
         } else {
             sea = 7;
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 7(o)
+        // 等号が抜けたからif条件は満たさない　→　elseを見る
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -67,7 +68,8 @@ public class Step02IfForTest extends PlainTestCase {
         } else {
             sea = 9;
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 7(o)
+        // elseで結合している条件式だから各条件は並列
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -107,7 +109,9 @@ public class Step02IfForTest extends PlainTestCase {
         if (land) {
             sea = 10;
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 10(o)
+        // 愚直に上から読んでた...
+        // landが真ならという条件を先に読んでおけば読む時間を短くできた...
     }
 
     // ===================================================================================
@@ -123,7 +127,9 @@ public class Step02IfForTest extends PlainTestCase {
                 sea = stage;
             }
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => dockside(o)
+        // i番目のリストの要素を取得する関数だと解釈
+        // 0からスタートのインデックスなら1に対応する要素を代入
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -133,7 +139,8 @@ public class Step02IfForTest extends PlainTestCase {
         for (String stage : stageList) {
             sea = stage;
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => magiclamp(o)
+        // 最後まで代入し続けてループ終了　→ 一番最後の要素が入ったままだと推測
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -149,7 +156,8 @@ public class Step02IfForTest extends PlainTestCase {
                 break;
             }
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => hangar(o)
+        // continueで次のループにスキップ, hangarでループ終了
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -165,7 +173,9 @@ public class Step02IfForTest extends PlainTestCase {
             }
         });
         String sea = sb.toString();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => dockside(o)
+        // docksideが条件を満たしてappend
+        // 次のループ？でreturn(>0だから) → ループ終了と推測
     }
 
     // ===================================================================================
@@ -177,6 +187,16 @@ public class Step02IfForTest extends PlainTestCase {
      */
     public void test_iffor_making() {
         // write if-for here
+        List<String> stageList = prepareStageList();
+        List<String> sb = new ArrayList<>();
+        for (String stage : stageList) {
+            if (stage.contains("a")) {
+                sb.add(stage);
+            }
+        }
+        for (String s : sb) {
+            log(s);
+        }
     }
 
     // ===================================================================================
