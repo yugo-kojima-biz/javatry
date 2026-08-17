@@ -74,7 +74,7 @@ public class Step01VariableTest extends PlainTestCase {
         // 今回だと...**log()**メソッドの呼び出し？
         // 特徴：
         // ・単一継承→一個まで(pythonは複数継承可能)
-        // TODO done kojima Javaが単一継承なのはDiamond Problemが起こらないようにするためです。（興味あれば以下のWiki参考になると思います） by noniwa
+        // done kojima Javaが単一継承なのはDiamond Problemが起こらないようにするためです。（興味あれば以下のWiki参考になると思います） by noniwa
         //   https://ja.wikipedia.org/wiki/%E8%8F%B1%E5%BD%A2%E7%B6%99%E6%89%BF%E5%95%8F%E9%A1%8C (AIに聞いた方がわかりやすいかも)
         //   PythonはC3 Linearizationというアルゴリズムを使って以上の問題を解決しているみたいですね。（JavaとPythonの思想の違いが出ていて面白い）
         // → Diamond Problem...初耳です。学びになります...
@@ -156,7 +156,7 @@ public class Step01VariableTest extends PlainTestCase {
         // sea.add(new BigDecimal(1)) は、
         // sea に 1 を足した結果の新しい BigDecimal を返す
         // でも、その返り値をどこにも代入していない
-        // TODO done kojima immutableという概念がでてきたの素晴らしいと思います！ by noniwa
+        // done kojima immutableという概念がでてきたの素晴らしいと思います！ by noniwa
         //   Primitive型とObject型は変数で保持しているものが違うので注意ですね。
         //   https://qiita.com/pike3/items/4401f4f652871546cedd
         // 「ポインタ」
@@ -231,7 +231,7 @@ public class Step01VariableTest extends PlainTestCase {
         // みたいになると思った
         // private String instanceBroadway;
         // という宣言？が上にあって暗黙的に？nullがデフォルトで入っている？
-        // TODO kojima 合ってます！変数を宣言したけど、初期化していないのでどのメモリアドレスも参照していない状態、つまりnullになっています。 by noniwa
+        // done kojima 合ってます！変数を宣言したけど、初期化していないのでどのメモリアドレスも参照していない状態、つまりnullになっています。 by noniwa
         // 今回上で宣言されているのはインスタンス変数。そもそも今までのメソッド内で宣言されてたのがローカル変数。
         // 「デフォルトで入っている」というのも、
         // インスタンス変数・static変数・配列中の要素には規定の値が入る
@@ -333,7 +333,7 @@ public class Step01VariableTest extends PlainTestCase {
         // Q. "this"って？
         // A. コード実行中のクラスオブジェクトインスタンス全体？
 
-        // TODO kojima [ふぉろー] クラスの構成要素Goodです。 by jflute (2026/08/03)
+        // done kojima [ふぉろー] クラスの構成要素Goodです。 by jflute (2026/08/03)
         // フィールドという言葉もよく使われます。staticも含みますが、staticの変数がレアなので、
         // フィールドというとインスタンス変数のことを指すように言う方も多いですね。
         //
@@ -341,7 +341,21 @@ public class Step01VariableTest extends PlainTestCase {
         // privateは、直接触るのはダメだけど、publicな人を経由して触るのはOKということで。
         // なので、privateにするだけで絶対に変更できない、というわけではないことに注意ですね。
 
-        // TODO jflute 次回1on1でもう少し踏み込んでみる (2026/08/03)
+        // done jflute 次回1on1でもう少し踏み込んでみる (2026/08/03)
+
+        // #1on1: Q. private変数 + publicメソッドはなんの意味があるのか？ (2026/08/17)
+        // public変数だと、途中の挟み込み処理ができないので、ログを出したり、filterしたりなどの追加処理が入れられなくなる。
+        // e.g.
+        //    public void setInstanceMagiclamp(String str) {
+        //        logger.info("xxxxがyyyyを書き換えました: ");
+        //        this.instanceMagiclamp = str;
+        //    }
+        // 変数は直接触らせるのではなく、管理人さん経由で値をsetするようにすることで、
+        // そういった変数の管理ができるようになる。最初そういう処理がなくても、後から追加したくなる。
+        // (データに対して、その振る舞いをセットで提供するオブジェクト、step6のオブジェクト指向につながる)
+        //
+        // なので、変数をpublicにすることは、0ではないが、あまりない。
+        // (publicフィールドは、フレームワークによっては、場面によって割り切りで使う時あり)
     }
 
     private void helpInstanceVariableViaMethod(String instanceMagiclamp) {
@@ -416,13 +430,17 @@ public class Step01VariableTest extends PlainTestCase {
         // pythonだと：
         // def helpMethodArgumentVariable(sea):
         //     sea = ["harbor", 416]
+        //     sea = sea.join([416]) // by jflute
+        //     sea = sea + "416" // by jflute
         //
-        // sea = ["harbor"]
+        // sea = "harbor"
         // help(sea)
         // print(sea)
         //
         // みたいなもの？だと思って実行。
         // まだ感覚的にしっくりこないです
+        // #1on1: Pythonには、StringBuilderのようなmutableな文字列クラスがないようなので... (2026/08/17)
+        // ぴったし当てはめることはちょっと難しそう。
     }
 
     private void helpMethodArgumentVariable(StringBuilder sea, int land) {
@@ -456,8 +474,7 @@ public class Step01VariableTest extends PlainTestCase {
         // define variables here
         String sea = "mystic";
         Integer land = null;
-        log(sea +  "," + land + "," + piari);
-
+        log(sea + "," + land + "," + piari);
     }
 
     // ===================================================================================
@@ -481,9 +498,10 @@ public class Step01VariableTest extends PlainTestCase {
         StringBuilder sea = new StringBuilder("mystic");
         helpMyMethod(sea);
         log(sea);
+        // #1on1: その場でやってみた (2026/08/17)
     }
-    private void helpMyMethod(StringBuilder sea)
-    {
+
+    private void helpMyMethod(StringBuilder sea) {
         String seaStr = sea.toString();
         sea = new StringBuilder(seaStr).append(" is changed");
     }
