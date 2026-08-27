@@ -25,7 +25,7 @@ import org.docksidestage.unit.PlainTestCase;
  * Operate exercise as javadoc. If it's question style, write your answer before test execution. <br>
  * (javadocの通りにエクササイズを実施。質問形式の場合はテストを実行する前に考えて答えを書いてみましょう)
  * @author jflute
- * @author your_name_here
+ * @author yugo-kojima-biz
  */
 public class Step02IfForTest extends PlainTestCase {
 
@@ -113,7 +113,7 @@ public class Step02IfForTest extends PlainTestCase {
         log(sea); // your answer? => 10(o)
         // 愚直に上から読んでた...
         // landが真ならという条件を先に読んでおけば読む時間を短くできた...
-        // TODO kojima [いいね] そういうことを考えることができるのは素晴らしい。 by jflute (2026/08/17)
+        // TODO done kojima [いいね] そういうことを考えることができるのは素晴らしい。 by jflute (2026/08/17)
         // エクササイズとしては上から読んで目のトレーニングになりましたから、全然気にしないでOKです。
 
         // #1on1: 漠然読み (2026/08/17)
@@ -141,7 +141,9 @@ public class Step02IfForTest extends PlainTestCase {
         // 仮説思考みたいな考え方のコードの読み方。
         // TODO kojima [読み物課題] My Favorite Book: 仮説思考  by jflute (2026/08/17)
         // https://jflute.hatenadiary.jp/entry/20150111/kasetsu
-        // TODO 久保さんのブログで紹介されていた論点思考も面白かったのでおすすめです笑 by noniwa
+        // TODO done 久保さんのブログで紹介されていた論点思考も面白かったのでおすすめです笑 by noniwa
+        // →AI時代にこそ上流スキルは大事になってくる？とはよく言われますが...
+        // →ブログのフォントがいい...
     }
 
     // ===================================================================================
@@ -206,7 +208,8 @@ public class Step02IfForTest extends PlainTestCase {
         log(sea); // your answer? => dockside(o)
         // docksideが条件を満たしてappend
         // 次のループ？でreturn(>0だから) → ループ終了と推測
-        // TODO kojima 合っていると思います！ by noniwa
+        // TODO done kojima 合っていると思います！ by noniwa
+        // → ありがとうございます！
     }
 
     // ===================================================================================
@@ -228,8 +231,9 @@ public class Step02IfForTest extends PlainTestCase {
         for (String s : sb) {
             log(s);
         }
-        // TODO kojime ArrayList<String> sb = new ArrayList<>(); ではなく、 List<String> sb = new ArrayList<>();
+        // TODO done kojime ArrayList<String> sb = new ArrayList<>(); ではなく、 List<String> sb = new ArrayList<>();
         //  と書いているのが "programming to an interface" が体現できていて理想的なコードだと思いました！ by noniwa
+        // →　interfaceの考え方だと書き換えやすいってこと以外にもメリットはいろいろあるんですね...
     }
 
     // ===================================================================================
@@ -239,20 +243,61 @@ public class Step02IfForTest extends PlainTestCase {
      * Change foreach statement to List's forEach() (keep result after fix) <br>
      * (foreach文をforEach()メソッドへの置き換えてみましょう (修正前と修正後で実行結果が同じになるように))
      */
+    // 修正前
+//    public void test_iffor_refactor_foreach_to_forEach() {
+//        List<String> stageList = prepareStageList();
+//        String sea = null;
+//        for (String stage : stageList) {
+//            if (stage.startsWith("br")) {
+//                continue;
+//            }
+//            sea = stage;
+//            if (stage.contains("ga")) {
+//                break;
+//            }
+//        }
+//        log(sea); // should be same as before-fix
+//    }
+    // 修正案①
+//    public void test_iffor_refactor_foreach_to_forEach() {
+//        List<String> stageList = prepareStageList();
+//        String sea = null;
+//        StringBuilder sb = new StringBuilder();
+//        stageList.forEach(stage -> {
+//            if (!stage.startsWith("br")) {
+//                if(stage.contains("ga"))  {
+//                    sb.append(stage);
+//                    return;
+//                }
+//            }
+//        });
+//        sea = sb.toString();
+//        log(sea); // should be same as before-fix //hangar()
+//    }
+
+    // 修正案②
     public void test_iffor_refactor_foreach_to_forEach() {
         List<String> stageList = prepareStageList();
-        String sea = null;
-        for (String stage : stageList) {
+        String[] seaFilling = { null };
+        boolean[] isStopped = { false };
+
+        stageList.forEach(stage -> {
+            if (isStopped[0]) {
+                return;
+            }
             if (stage.startsWith("br")) {
-                continue;
+                return;
             }
-            sea = stage;
+            seaFilling[0] = stage;
             if (stage.contains("ga")) {
-                break;
+                isStopped[0] = true;
             }
-        }
-        log(sea); // should be same as before-fix
+        });
+
+        String sea = seaFilling[0];
+        log(sea); // hangar
     }
+    // seaはString型であるべき？
 
     /**
      * Make your original exercise as question style about if-for statement. <br>
@@ -266,6 +311,18 @@ public class Step02IfForTest extends PlainTestCase {
      */
     public void test_iffor_yourExercise() {
         // write your code here
+        List<String> stageList = prepareStageList();
+        int[] vowelCount = { 0 };
+
+        stageList.forEach(stage -> {
+            for (char ch : stage.toCharArray()) {
+                if ("aiueo".contains(String.valueOf(ch))) {
+                    vowelCount[0]++;
+                }
+            }
+        });
+
+        log(vowelCount[0]); // your answer? => 11
     }
 
     // ===================================================================================

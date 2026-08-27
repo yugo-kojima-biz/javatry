@@ -26,7 +26,7 @@ import org.docksidestage.unit.PlainTestCase;
  * Operate exercise as javadoc. If it's question style, write your answer before test execution. <br>
  * (javadocの通りにエクササイズを実施。質問形式の場合はテストを実行する前に考えて答えを書いてみましょう)
  * @author jflute
- * @author your_name_here
+ * @author yugo-kojima-biz
  */
 public class Step03DataTypeTest extends PlainTestCase {
 
@@ -54,7 +54,7 @@ public class Step03DataTypeTest extends PlainTestCase {
             BigDecimal addedDecimal = amba.add(new BigDecimal(land));
             sea = String.valueOf(addedDecimal);
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 18.4(o)
     }
 
     // ===================================================================================
@@ -82,7 +82,11 @@ public class Step03DataTypeTest extends PlainTestCase {
         if ((int) dstore > piari) {
             sea = 0;
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 0(x)
+        // ((int) dstore > piari) キャストの存在を完全に忘れていた。(初歩的ミスの極み)
+        // 2.3dと2.3Dで区別がないのでseaはキャストでbyte型に
+        // 知らなかった(忘却し切っている？)がbyte型は小さい整数型8it,補数表現があるなら-(2^7)<byte型<2^7-1 ?
+        // 最後に2に丸められた値が入る
     }
 
     // ===================================================================================
@@ -92,8 +96,9 @@ public class Step03DataTypeTest extends PlainTestCase {
     public void test_datatype_object() {
         St3ImmutableStage stage = new St3ImmutableStage("hangar");
         String sea = stage.getStageName();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => hangar(o)
     }
+    // getStageName()はクラスのフィールドのstageNameを返すメソッドだと推測
 
     private static class St3ImmutableStage {
 
