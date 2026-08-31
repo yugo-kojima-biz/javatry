@@ -141,9 +141,19 @@ public class Step02IfForTest extends PlainTestCase {
         // 仮説思考みたいな考え方のコードの読み方。
         // TODO kojima [読み物課題] My Favorite Book: 仮説思考  by jflute (2026/08/17)
         // https://jflute.hatenadiary.jp/entry/20150111/kasetsu
-        // TODO done 久保さんのブログで紹介されていた論点思考も面白かったのでおすすめです笑 by noniwa
+        // done 久保さんのブログで紹介されていた論点思考も面白かったのでおすすめです笑 by noniwa
         // →AI時代にこそ上流スキルは大事になってくる？とはよく言われますが...
         // →ブログのフォントがいい...
+        // #1on1: 元々、AIなかったとしても上流スキルは大事だった (2026/08/31)
+        // 開発者の視点で、ビジネスも理解して判断することができれば、
+        // 細かい機能設計とかでより良い判断できるようになってくる。
+        // また、コミュニケーションスキルとか人間関係スキルとか。
+        // 個人的には、人の活動としての総合力が求められるようになってくるかも!?
+        //
+        // この後も大事なものが変わってくるので、気にしすぎず、
+        // 目の前のことに集中してやって、得られる成長を得ておくことが大切。
+        // $人間としてのハードが大事 by こじまさん
+        // yes, yes 
     }
 
     // ===================================================================================
@@ -234,6 +244,16 @@ public class Step02IfForTest extends PlainTestCase {
         // TODO done kojime ArrayList<String> sb = new ArrayList<>(); ではなく、 List<String> sb = new ArrayList<>();
         //  と書いているのが "programming to an interface" が体現できていて理想的なコードだと思いました！ by noniwa
         // →　interfaceの考え方だと書き換えやすいってこと以外にもメリットはいろいろあるんですね...
+        // #1on1: インターフェースに対してのプログラミング (2026/08/31)
+        // ArrayList, LinkedListの違いのお話。
+        // 使う側はListという概念を満たしていればなんでも良いという考え方。
+        // 一方で、実現方法によってパフォーマンス的にどっちが適しているか？は時々気にする。
+        //
+        // 常に、使う側は最小限のことだけを知っている、というのが理想。
+        // 最小限のことだけを知っている → 最小限のことだけに依存している
+        // 無駄なことに依存しなければ、その無駄なことが変わっても影響がない。
+        //
+        // step6でさらにインターフェース深掘りするので続きはそこで。
     }
 
     // ===================================================================================
@@ -244,41 +264,49 @@ public class Step02IfForTest extends PlainTestCase {
      * (foreach文をforEach()メソッドへの置き換えてみましょう (修正前と修正後で実行結果が同じになるように))
      */
     // 修正前
-//    public void test_iffor_refactor_foreach_to_forEach() {
-//        List<String> stageList = prepareStageList();
-//        String sea = null;
-//        for (String stage : stageList) {
-//            if (stage.startsWith("br")) {
-//                continue;
-//            }
-//            sea = stage;
-//            if (stage.contains("ga")) {
-//                break;
-//            }
-//        }
-//        log(sea); // should be same as before-fix
-//    }
+    //    public void test_iffor_refactor_foreach_to_forEach() {
+    //        List<String> stageList = prepareStageList();
+    //        String sea = null;
+    //        for (String stage : stageList) {
+    //            if (stage.startsWith("br")) {
+    //                continue;
+    //            }
+    //            sea = stage;
+    //            if (stage.contains("ga")) {
+    //                break;
+    //            }
+    //        }
+    //        log(sea); // should be same as before-fix
+    //    }
     // 修正案①
-//    public void test_iffor_refactor_foreach_to_forEach() {
-//        List<String> stageList = prepareStageList();
-//        String sea = null;
-//        StringBuilder sb = new StringBuilder();
-//        stageList.forEach(stage -> {
-//            if (!stage.startsWith("br")) {
-//                if(stage.contains("ga"))  {
-//                    sb.append(stage);
-//                    return;
-//                }
-//            }
-//        });
-//        sea = sb.toString();
-//        log(sea); // should be same as before-fix //hangar()
-//    }
+    //    public void test_iffor_refactor_foreach_to_forEach() {
+    //        List<String> stageList = prepareStageList();
+    //        String sea = null;
+    //        StringBuilder sb = new StringBuilder();
+    //        stageList.forEach(stage -> {
+    //            if (!stage.startsWith("br")) {
+    //                if(stage.contains("ga"))  {
+    //                    sb.append(stage);
+    //                    return;
+    //                }
+    //            }
+    //        });
+    //        sea = sb.toString();
+    //        log(sea); // should be same as before-fix //hangar()
+    //    }
+    // #1on1: $案1は、条件とかの形式が変わってて、同じ結果を担保できてるかな？ (2026/08/31)
+    // $今のprepareStageList()なら大丈夫だろうけど...直感的に大丈夫かな？
+    // そこを直感的に感じられるセンスがとっても良い。
 
     // 修正案②
     public void test_iffor_refactor_foreach_to_forEach() {
+        // #1on1: 変数名、どうかな？ってご自身で思ったけど、悪くない (2026/08/31)
+        // まあこのエクササイズでいうと、元の変数名が無茶苦茶なので...
         List<String> stageList = prepareStageList();
         String[] seaFilling = { null };
+
+        // #1on1: 変数名Good, gaを含むという専用変数にするのか？汎用break変数にするのか？ (2026/08/31)
+        // そこはケースバイケースでどっちでもくらいなので、今回は汎用break変数というGood。
         boolean[] isStopped = { false };
 
         stageList.forEach(stage -> {
@@ -298,6 +326,8 @@ public class Step02IfForTest extends PlainTestCase {
         log(sea); // hangar
     }
     // seaはString型であるべき？
+
+    // TODO jflute 次回1on1にて、forEach()メソッドの意義についてお話しする予定 (2026/08/31)
 
     /**
      * Make your original exercise as question style about if-for statement. <br>

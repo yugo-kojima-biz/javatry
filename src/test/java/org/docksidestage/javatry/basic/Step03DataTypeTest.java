@@ -21,6 +21,8 @@ import java.time.LocalDateTime;
 
 import org.docksidestage.unit.PlainTestCase;
 
+// #1on1: 色々と気になる、ということ自体が才能 (2026/08/31)
+// 気にならない人は成長しないので。
 /**
  * The test of data type. <br>
  * Operate exercise as javadoc. If it's question style, write your answer before test execution. <br>

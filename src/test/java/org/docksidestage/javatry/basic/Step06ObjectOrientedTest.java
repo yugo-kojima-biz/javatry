@@ -330,6 +330,8 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         //
         // _/_/_/_/_/_/_/_/_/_/
     }
+    // TODO jflute step2にて、インターフェースの話の先取りをしているので... (2026/08/31)
+    // そこの話とつなげてフォローしなさい、未来のjfluteさん。
 
     // ===================================================================================
     //                                                                 Polymorphism Making
