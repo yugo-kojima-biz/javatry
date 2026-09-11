@@ -140,6 +140,7 @@ public class Step02IfForTest extends PlainTestCase {
         //
         // 仮説思考みたいな考え方のコードの読み方。
         // TODO kojima [読み物課題] My Favorite Book: 仮説思考  by jflute (2026/08/17)
+        // → 読む時間を作らなければ...
         // https://jflute.hatenadiary.jp/entry/20150111/kasetsu
         // done 久保さんのブログで紹介されていた論点思考も面白かったのでおすすめです笑 by noniwa
         // →AI時代にこそ上流スキルは大事になってくる？とはよく言われますが...

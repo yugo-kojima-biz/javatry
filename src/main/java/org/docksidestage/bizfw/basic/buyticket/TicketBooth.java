@@ -55,6 +55,7 @@ public class TicketBooth {
      * @throws TicketSoldOutException When ticket in booth is sold out.
      * @throws TicketShortMoneyException When the specified money is short for purchase.
      */
+    // 在庫の量を一個減らしてhandedMoneyを売上？として計上する →お金足りなくても在庫あげちゃう？
     public void buyOneDayPassport(Integer handedMoney) {
         if (quantity <= 0) {
             throw new TicketSoldOutException("Sold out");
@@ -64,7 +65,7 @@ public class TicketBooth {
             throw new TicketShortMoneyException("Short money: " + handedMoney);
         }
         if (salesProceeds != null) { // second or more purchase
-            salesProceeds = salesProceeds + handedMoney;
+            salesProceeds = salesProceeds + handedMoney; // 釣り銭見てる？
         } else { // first purchase
             salesProceeds = handedMoney;
         }
