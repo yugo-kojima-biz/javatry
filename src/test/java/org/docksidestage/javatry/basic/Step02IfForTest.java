@@ -113,7 +113,7 @@ public class Step02IfForTest extends PlainTestCase {
         log(sea); // your answer? => 10(o)
         // 愚直に上から読んでた...
         // landが真ならという条件を先に読んでおけば読む時間を短くできた...
-        // TODO done kojima [いいね] そういうことを考えることができるのは素晴らしい。 by jflute (2026/08/17)
+        // done kojima [いいね] そういうことを考えることができるのは素晴らしい。 by jflute (2026/08/17)
         // エクササイズとしては上から読んで目のトレーニングになりましたから、全然気にしないでOKです。
 
         // #1on1: 漠然読み (2026/08/17)
@@ -219,7 +219,7 @@ public class Step02IfForTest extends PlainTestCase {
         log(sea); // your answer? => dockside(o)
         // docksideが条件を満たしてappend
         // 次のループ？でreturn(>0だから) → ループ終了と推測
-        // TODO done kojima 合っていると思います！ by noniwa
+        // done kojima 合っていると思います！ by noniwa
         // → ありがとうございます！
     }
 
@@ -242,7 +242,7 @@ public class Step02IfForTest extends PlainTestCase {
         for (String s : sb) {
             log(s);
         }
-        // TODO done kojime ArrayList<String> sb = new ArrayList<>(); ではなく、 List<String> sb = new ArrayList<>();
+        // done kojime ArrayList<String> sb = new ArrayList<>(); ではなく、 List<String> sb = new ArrayList<>();
         //  と書いているのが "programming to an interface" が体現できていて理想的なコードだと思いました！ by noniwa
         // →　interfaceの考え方だと書き換えやすいってこと以外にもメリットはいろいろあるんですね...
         // #1on1: インターフェースに対してのプログラミング (2026/08/31)
@@ -328,7 +328,39 @@ public class Step02IfForTest extends PlainTestCase {
     }
     // seaはString型であるべき？
 
-    // TODO jflute 次回1on1にて、forEach()メソッドの意義についてお話しする予定 (2026/08/31)
+    // done jflute 次回1on1にて、forEach()メソッドの意義についてお話しする予定 (2026/08/31)
+    // 拡張for文(普通のfor文): 色々できる // Java10年目くらいから (2005年くらい)
+    // forEach()メソッド: 色々できない (仕組み的に) // Java20年目くらいから (2015年くらい)
+    //
+    // -> {}オブジェクトは、別クラス別メソッド。
+    // ローカル変数のコンセプトからしたら、別のローカル変数を勝手に書き換えちゃダメ。
+    // それができちゃうとカオスになりやすい。
+    //
+    // 拡張for文に比べて、forEach()メソッドは何が良い？
+    // $見やすさ？forの中で色々な変数が変わると？
+    // たくさん変数があった場合の話とか出ていたところが良い発想。
+    //
+    // immutable/mutableを思い出してみましょう。
+    // リンクさせてみましょう。
+    // 「制限を加えることで得られるものがある」
+    // immutable: 変えちゃいけない変数を変えられないことで安全/安心。
+    // forEach()メソッド: 外側の変数を変えられない + (ことで安全/安心)
+    //
+    // わりとストレートなループを回す時は、forEach()メソッドが合う。
+    // webサービスとかだと、ストレートなループがかなり多い。
+    //
+    // 適材適所で、ケースによって機能を使い分ける。
+    //
+    // よもやま: 一方で、適材適所すぎるのもつらい (2026/09/17)
+    // 使い分けの判断コスト。選択肢がたくさんありすぎてもつらい。
+    // 統一性のメリットを優先するかどうか？
+    //
+    // 実際、jfluteがフレームワークの機能デザインするときにあ...
+    // 適材適所だと7,8種類のメソッドを提供してみたいになるけど...
+    // たいがい使ってもらえない。2,3種類ならなんとか。
+    // 1種類にできるならそれに越したことはない。そういうときもある。
+    //
+    // forの話から思考プロセスまでつなげる深掘り力のトレーニング。
 
     /**
      * Make your original exercise as question style about if-for statement. <br>

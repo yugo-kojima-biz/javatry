@@ -158,6 +158,7 @@ public class Step04MethodTest extends PlainTestCase {
         ++sea;
         sea = inParkCount;
         log(sea); // your answer? =>　0(x) // インスタンス変数!!1!!(小慣れて確認を怠るフェーズに入っている...)
+        // #1on1: 自戒できているのでGood (2026/09/17)
     }
 
     private void offAnnualPassport(boolean hasAnnualPassport) {
@@ -201,18 +202,52 @@ public class Step04MethodTest extends PlainTestCase {
         }
     }
 
+    // #1on1: いいね、メソッド定義順がメソッド呼び出しの順序と一致してるのでわかりやすい(把握しやすい) (2026/09/17)
+    // それが正解とは限らないですが、一つの方法論として。
+    // $本来は意味でまとまってた方が、今回は先にフローがあるので...
+    // replaceはreplaceでまとめたいかも。
+    // jfluteは、両方やってる。
+    // LastaFlute の ActionRequestProcessor の例。
+    // 階層構造を作りながらその中ではできるだけ呼び出し順序。
+    //
+    // 既存クラス、一番下に追加されやすい問題。
+    // おじゃまします感。
+    // 既存クラス作った人、もういないかもしれない。
+    // 既存クラス誰が責任持つのか？
+    // 既存クラスのコード体裁デザインに責任持つのは誰？
+    // 一人一人が既存のコード体裁デザインを把握して尊重して修正をして欲しい。
+    // これをきっかけに、コード体裁デザインを少しでも意識してもらえたら。
+    //
+    // (リファクタリングチケットのジレンマはどこかで)
+
     // write methods here
-    private String replaceAwithB(String str) {return str.replace("A","B");}
-    private String replaceCwithB(String str) {return str.replace("C","B");}
-    private String quote(String str, String quotation) {return (quotation+str+quotation);}
+    private String replaceAwithB(String str) {
+        return str.replace("A", "B");
+    }
+
+    private String replaceCwithB(String str) {
+        return str.replace("C", "B");
+    }
+
+    // #1on1: いいね、第二引数の名前わかりやすい (2026/09/17)
+    // $最初はstr1, str2だったけど...
+    // 自分で改善できたのが素晴らしい。
+    private String quote(String str, String quotation) {
+        return (quotation + str + quotation);
+    }
+
     private boolean availableLogging = true;
-    private boolean isAvailableLogging() {return availableLogging;}
-    private void showSea(String sea) {log(sea);}
-//    private String replaceAwithB(String str) {log(str.replace("A","B"));return str.replace("A","B");}
-//    private String replaceCwithB(String str) {log(str.replace("C","B")); return str.replace("C","B");}
-//    private String quote(String str1, String str2) {log((str2+str1+str2)); return (str2+str1+str2);}
-//    private boolean availableLogging = true;
-//    private boolean isAvailableLogging() {log(availableLogging); return availableLogging;}
 
+    private boolean isAvailableLogging() {
+        return availableLogging;
+    }
 
+    private void showSea(String sea) {
+        log(sea);
+    }
+    //    private String replaceAwithB(String str) {log(str.replace("A","B"));return str.replace("A","B");}
+    //    private String replaceCwithB(String str) {log(str.replace("C","B")); return str.replace("C","B");}
+    //    private String quote(String str1, String str2) {log((str2+str1+str2)); return (str2+str1+str2);}
+    //    private boolean availableLogging = true;
+    //    private boolean isAvailableLogging() {log(availableLogging); return availableLogging;}
 }
