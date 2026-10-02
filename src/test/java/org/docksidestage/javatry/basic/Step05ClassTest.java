@@ -40,7 +40,7 @@ public class Step05ClassTest extends PlainTestCase {
      * (メソッド終了時の変数 sea の中身は？)
      */
     public void test_class_howToUse_basic() {
-        TicketBooth booth = new TicketBooth(); // command+クリック→定義しているところまで飛べるが、command+option+←で飛ぶ前の場所に戻れるのを知った。
+        TicketBooth booth = new TicketBooth(); // command+クリック→定義しているところまで飛べるが、command+option+←で前の場所に戻れるのを知った。というかredo undo?
         booth.buyOneDayPassport(7400);
         int sea = booth.getQuantity();
         log(sea); // your answer? => 9(o)
@@ -66,7 +66,57 @@ public class Step05ClassTest extends PlainTestCase {
     public void test_class_howToUse_wrongQuantity() {
         Integer sea = doTest_class_ticket_wrongQuantity();
         log(sea); // your answer? =>
+        // always exception but none //こいついらん
+        // Failed to buy one-day passport: money=7399
+        // Short money: 7399
+        // 9(x)
+        //
+        // exceptionを扱おうとした経験が少ない
+        // 付け焼き刃...
+        // fail()単体で実行するとどうなる
+        // → なんか抽象バージョンみたいなのが書いてあった
+        // → シンプルに同じ構造
+        //
+        //
+        // ※throwとexceptionについて
+        // 個人でやる時にはtailやlogとかprintで誤魔化しまくっていたので理解度がモザイク...
+        //
+        // ・throwについて
+        // イメージ：returnとかbreakの兄弟みたいな...
+        //
+        // continue：今回のループ処理を抜けて次のループに行く
+        // break：loopとかswitch自体を抜けてloop/switchブロックの後ろに行く
+        // return：今いるメソッドを抜けて呼び出し元に行く
+        // ※ throw：処理自体抜けて対応するcatchに？
+        // 下のfail()のみの場合はrunTest()のcatchまで遡った？
+        // catchがなかったら？
+        //
+        // ・exceptionについて
+        // throwable
+        //  ├─ error?
+        //  └─ exception?
+        // ここで終了...
     }
+
+//    public void test_class_howToUse_wrongQuantity(){
+//        fail("always exception but none");
+//        // => junit.framework.AssertionFailedError: always exception but none
+//        // ふむ...
+//        // ...
+//        //
+//        // 多分これでthrowableがalways exception but noneとして実行↓
+//        // postTestは名前の通りテスト後→テストが正常終了した時にのみ実行される
+//        // → 今回のfailが動かなかった時のそのままの説明
+//        //    protected void runTest() throws Throwable {
+//        //        try {
+//        //            super.runTest();
+//        //            postTest();
+//        //        } catch (Throwable e) { // to record in application log
+//        //            log("Failed to finish the test: " + xgetCaseDisp(), e);
+//        //            throw e;
+//        //        }
+//        //    }
+//    }
 
     private Integer doTest_class_ticket_wrongQuantity() {
         TicketBooth booth = new TicketBooth();
