@@ -81,6 +81,7 @@ public class Step07ExceptionTest extends PlainTestCase {
     // ===================================================================================
     //                                                                           Hierarchy
     //                                                                           =========
+    // TODO jflute step5でErrorとExceptionの違いについて先取りしているのでそのつもりでフォロー (2026/10/05)
     /**
      * What string is sea variable at the method end? <br>
      * (メソッド終了時の変数 sea の中身は？)

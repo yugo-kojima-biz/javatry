@@ -40,6 +40,8 @@ public class Step05ClassTest extends PlainTestCase {
      * (メソッド終了時の変数 sea の中身は？)
      */
     public void test_class_howToUse_basic() {
+        // #1on1: 戻るの大事(^^。ぼくも command+option+← はよく使う (2026/10/05)
+        // ちら見から戻るのにとても使える。今の時代、より一層読むためのショートカット重要と言える。
         TicketBooth booth = new TicketBooth(); // command+クリック→定義しているところまで飛べるが、command+option+←で前の場所に戻れるのを知った。というかredo undo?
         booth.buyOneDayPassport(7400);
         int sea = booth.getQuantity();
@@ -59,7 +61,6 @@ public class Step05ClassTest extends PlainTestCase {
         TicketBooth booth = new TicketBooth();
         Integer sea = booth.getSalesProceeds();
         log(sea); // your answer? => null(o)
-
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -83,40 +84,108 @@ public class Step05ClassTest extends PlainTestCase {
         //
         // ・throwについて
         // イメージ：returnとかbreakの兄弟みたいな...
+        // #1on1: イメージGood, 途中中断を示すものということで近いと思います (2026/10/05)
+        // o returnは戻り値で何かを戻す。
+        // o throwは戻り値じゃない枠組みで何かを戻す(投げる)。
+        // (戻り値以外のoutputが用意されている)
         //
         // continue：今回のループ処理を抜けて次のループに行く
         // break：loopとかswitch自体を抜けてloop/switchブロックの後ろに行く
         // return：今いるメソッドを抜けて呼び出し元に行く
         // ※ throw：処理自体抜けて対応するcatchに？
         // 下のfail()のみの場合はrunTest()のcatchまで遡った？
+        // #1on1: TestCaseやPlainTestCaseなどのcatchを経由している。 (2026/10/05)
+        // ただ、IDEのUnitTest実行の処理まで異常を伝えるために、再throwしている。
+        // javatryではJUnitというUnitTestフレームワークを使っている。
+        // それを拡張したUTFlute(jflute作)というフレームワークも使っている。
+        // (JUnitとUTFluteがマージされたものみたいな感じ)
+        //
         // catchがなかったら？
+        // #1on1: Java自身がcatchをしてログを出したりするけど... (2026/10/05)
+        // デフォルトの挙動だと実際のアプリでのデバッグでは使いづらいので、大抵アプリでしっかりcatchする。
         //
         // ・exceptionについて
         // throwable
         //  ├─ error?
         //  └─ exception?
         // ここで終了...
+        // 
+        /*
+                           +-----------------+
+                           |                 |
+                  +------------------+       |
+                  |     Throwable    | <>----+
+                  +------------------+
+                           △ 
+                           ｜
+            +------------------------------+
+            |                              |
+   +--------------------+        +-------------------+
+   |       Error        |        |    Exception      |
+   +--------------------+        +-------------------+
+     NoSuchMethodError                    △ 
+     OutOfMemoryError                     ｜
+                           +------------------------------+
+                           |                              |
+                 +--------------------+        +-------------------+
+                 |  RuntimeException  |        |    XxxException   |
+                 +--------------------+        +-------------------+
+                           △                 IOException, SQLException
+                           ｜
+                   NullPointerException            
+                   IllegalStateException
+         */
+        // Throwable: Javaの文法的に投げることができるもの (事務的なクラス)
+        // (Throwableを継承していないものはthrowできない)
+        //
+        // Exceptionという言葉とは？使ったことある？
+        // $pythonでちょっと見かけた
+        // 一般用語だけど、しょうっちゅう使う言葉じゃない。
+        // 日本語としての "例外" という言葉を使うことはあっただろう。
+        //
+        // Errorという言葉とは？使ったことある？
+        // $普通にある
+        // 一般的にすでによく使われている言葉。
+        //
+        // ExceptionとErrorの概念的な違いは？
+        // $目の前にカードが置いてあって...!? 400は例外？500はエラー？
+        //
+        // 例外ってダメなこと(状況)ですか？ $文脈によるかも
+        // エラーってダメなこと(状況)ですか？ $勘弁してよ → ダメ
+        //
+        // 例外は正常ではないけど、ダメとも言えない(まだわからない)。
+        // 良し悪しの判定をしていないレアケース。
+        //
+        // throwする側は、あくまで例外、どう呼ばれてるかわかんないから。
+        // catch側(呼び出し)が、その例外を、「ああ、エラーでした」or「いやそのまま例外です」。
+        // なので、例外の中にエラーも包含されているようなイメージ。
+        // なのでなので、Javaとしては、例外という言葉を使ってthrowするようになっている。
+        //
+        // じゃあErrorクラスは？
+        // throwする瞬間からエラーであることがわかりきってる状況。
+        // o OutOfMemoryError, NoSuchMethodError
+        // 続きは、step7にて。言語によって使う用語が違う話。(でも概念は同じ話)
     }
 
-//    public void test_class_howToUse_wrongQuantity(){
-//        fail("always exception but none");
-//        // => junit.framework.AssertionFailedError: always exception but none
-//        // ふむ...
-//        // ...
-//        //
-//        // 多分これでthrowableがalways exception but noneとして実行↓
-//        // postTestは名前の通りテスト後→テストが正常終了した時にのみ実行される
-//        // → 今回のfailが動かなかった時のそのままの説明
-//        //    protected void runTest() throws Throwable {
-//        //        try {
-//        //            super.runTest();
-//        //            postTest();
-//        //        } catch (Throwable e) { // to record in application log
-//        //            log("Failed to finish the test: " + xgetCaseDisp(), e);
-//        //            throw e;
-//        //        }
-//        //    }
-//    }
+    //    public void test_class_howToUse_wrongQuantity(){
+    //        fail("always exception but none");
+    //        // => junit.framework.AssertionFailedError: always exception but none
+    //        // ふむ...
+    //        // ...
+    //        //
+    //        // 多分これでthrowableがalways exception but noneとして実行↓
+    //        // postTestは名前の通りテスト後→テストが正常終了した時にのみ実行される
+    //        // → 今回のfailが動かなかった時のそのままの説明
+    //        //    protected void runTest() throws Throwable {
+    //        //        try {
+    //        //            super.runTest();
+    //        //            postTest();
+    //        //        } catch (Throwable e) { // to record in application log
+    //        //            log("Failed to finish the test: " + xgetCaseDisp(), e);
+    //        //            throw e;
+    //        //        }
+    //        //    }
+    //    }
 
     private Integer doTest_class_ticket_wrongQuantity() {
         TicketBooth booth = new TicketBooth();
