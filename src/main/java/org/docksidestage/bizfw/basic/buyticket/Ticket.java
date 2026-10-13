@@ -25,6 +25,8 @@ public class Ticket {
     //                                                                           =========
     private final int displayPrice; // written on ticket, park guest can watch this
     private boolean alreadyIn; // true means this ticket is unavailable
+    private int availableCount; // 追加
+    private boolean nightOnly; // 追加
 
     // ===================================================================================
     //                                                                         Constructor
@@ -32,6 +34,20 @@ public class Ticket {
     public Ticket(int displayPrice) {
         this.displayPrice = displayPrice;
     }
+    // コンストラクタをオーバーロード(小声)...
+    // 引数の型や数が違うと使える...?
+    // 戻り値の型を変えただけではできない..?
+    public Ticket(int displayPrice, int availableCount) {
+        this.displayPrice = displayPrice;
+        this.availableCount = availableCount;
+    }
+
+    public Ticket(int displayPrice, int availableCount, boolean nightOnly) {
+        this.displayPrice = displayPrice;
+        this.availableCount = availableCount;
+        this.nightOnly = nightOnly;
+    }
+
 
     // ===================================================================================
     //                                                                             In Park
@@ -40,7 +56,23 @@ public class Ticket {
         if (alreadyIn) {
             throw new IllegalStateException("Already in park by this ticket: displayedPrice=" + displayPrice);
         }
-        alreadyIn = true;
+        if (availableCount <= 1){
+            alreadyIn = true;
+        }
+        availableCount --;
+    }
+
+    public void doInPark(boolean isNight) {
+        if (alreadyIn) {
+            throw new IllegalStateException("Already in park by this ticket: displayedPrice=" + displayPrice);
+        }
+        if (nightOnly && !isNight) {
+            throw new IllegalStateException("This ticket can only be used at night");
+        }
+        if (availableCount <= 1){
+            alreadyIn = true;
+        }
+        availableCount --;
     }
 
     // ===================================================================================

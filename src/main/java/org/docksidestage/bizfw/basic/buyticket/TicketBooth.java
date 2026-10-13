@@ -25,18 +25,40 @@ public class TicketBooth {
     //                                                                          ==========
     private static final int MAX_QUANTITY = 10;
     private static final int ONE_DAY_PRICE = 7400; // when 2019/06/15
-
+    private static final int TWO_DAY_PRICE = 13200;
+    private static final int FOUR_DAY_PRICE = 22400;
+    private static final int buyNightOnlyTwoDay_PRICE = 7400;
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
     private int quantity = MAX_QUANTITY;
     private Integer salesProceeds; // null allowed: until first purchase
+    private Integer change;
 
     // ===================================================================================
     //                                                                         Constructor
     //                                                                         ===========
     public TicketBooth() {
     }
+
+
+
+    //    // back up
+    //    // 在庫の量を一個減らしてhandedMoneyを売上？として計上する →お金足りなくても在庫あげちゃう？
+    //    public void buyOneDayPassport(Integer handedMoney) {
+    //        if (quantity <= 0) {
+    //            throw new TicketSoldOutException("Sold out");
+    //        }
+    //        --quantity;
+    //        if (handedMoney < ONE_DAY_PRICE) {
+    //            throw new TicketShortMoneyException("Short money: " + handedMoney);
+    //        }
+    //        if (salesProceeds != null) { // second or more purchase
+    //            salesProceeds = salesProceeds + handedMoney; // 釣り銭見てる？
+    //        } else { // first purchase
+    //            salesProceeds = handedMoney;
+    //        }
+    //    }
 
     // ===================================================================================
     //                                                                          Buy Ticket
@@ -56,19 +78,140 @@ public class TicketBooth {
      * @throws TicketShortMoneyException When the specified money is short for purchase.
      */
     // 在庫の量を一個減らしてhandedMoneyを売上？として計上する →お金足りなくても在庫あげちゃう？
-    public void buyOneDayPassport(Integer handedMoney) {
+    // ① test_class_letsFix_ticketQuantityReduction()
+//    public void buyOneDayPassport(Integer handedMoney) {
+//        if (quantity <= 0) {
+//            throw new TicketSoldOutException("Sold out");
+//        }
+////        --quantity; // ①の修正
+//        if (handedMoney < ONE_DAY_PRICE) {
+//            throw new TicketShortMoneyException("Short money: " + handedMoney);
+//        }
+//        if (salesProceeds != null) { // second or more purchase
+//            salesProceeds = salesProceeds + handedMoney; // 釣り銭見てる？
+//            --quantity; // ①の修正
+//        } else { // first purchase
+//            salesProceeds = handedMoney;
+//            --quantity; // ①の修正
+//        }
+//    }
+
+    // ②test_class_letsFix_salesProceedsIncrease()
+//    public void buyOneDayPassport(Integer handedMoney) {
+//        if (quantity <= 0) {
+//            throw new TicketSoldOutException("Sold out");
+//        }
+//        //        --quantity; // ①の修正
+//        if (handedMoney < ONE_DAY_PRICE) {
+//            throw new TicketShortMoneyException("Short money: " + handedMoney);
+//        }
+//        change = handedMoney - ONE_DAY_PRICE;
+//        if (salesProceeds != null) { // second or more purchase
+//            salesProceeds = salesProceeds + ONE_DAY_PRICE; // 釣り銭見てる？
+//            --quantity; // ①の修正
+//        } else { // first purchase
+//            salesProceeds = ONE_DAY_PRICE;
+//            --quantity; // ①の修正
+//        }
+//    }
+//
+//    public int buyTwoDayPassport(Integer handedMoney) {
+//        if (quantity <= 0) {
+//            throw new TicketSoldOutException("Sold out");
+//        }
+//        //        --quantity; // ①の修正
+//        if (handedMoney < TWO_DAY_PRICE) {
+//            throw new TicketShortMoneyException("Short money: " + handedMoney);
+//        }
+//        change = handedMoney - TWO_DAY_PRICE;
+//        if (salesProceeds != null) { // second or more purchase
+//            salesProceeds = salesProceeds + TWO_DAY_PRICE; // 釣り銭見てる？
+//            --quantity; // ①の修正
+//        } else { // first purchase
+//            salesProceeds = TWO_DAY_PRICE;
+//            --quantity; // ①の修正
+//        }
+//        return  change;
+//    }
+
+
+    // ③ test_class_letsFix_refactor_recycle()
+//    public void buyOneDayPassport(Integer handedMoney) {
+//        buyPassport(handedMoney,ONE_DAY_PRICE);
+//    }
+
+//    public int buyTwoDayPassport(Integer handedMoney) {
+//        int change = buyPassport(handedMoney,TWO_DAY_PRICE);
+//        return change;
+//    }
+//
+//    public int buyPassport(Integer handedMoney, Integer PRICE){
+//        if (quantity <= 0) {
+//            throw new TicketSoldOutException("Sold out");
+//        }
+//        //        --quantity; // ①の修正
+//        if (handedMoney < PRICE) {
+//            throw new TicketShortMoneyException("Short money: " + handedMoney);
+//        }
+//        change = handedMoney - PRICE;
+//        if (salesProceeds != null) { // second or more purchase
+//            salesProceeds = salesProceeds + PRICE; // 釣り銭見てる？
+//            --quantity; // ①の修正
+//        } else { // first purchase
+//            salesProceeds = PRICE;
+//            --quantity; // ①の修正
+//        }
+//        return  change;
+//    }
+
+    // ④ test_class_moreFix_return_ticket()
+    public Ticket buyOneDayPassport(Integer handedMoney) {
+        buyPassport(handedMoney,ONE_DAY_PRICE);
+        return new Ticket(ONE_DAY_PRICE);
+    }
+
+    public TicketBuyResult buyTwoDayPassport(Integer handedMoney) {
+        TicketBuyResult result = new TicketBuyResult();
+        int change = buyPassport(handedMoney,TWO_DAY_PRICE);
+        result.price = TWO_DAY_PRICE;
+        result.change = change;
+
+        return result;
+    }
+
+    // test_class_moreFix_usePluralDays()用
+//    public Ticket buyTwoDayPassport(Integer handedMoney) {
+//        buyPassport(handedMoney,TWO_DAY_PRICE);
+//        return new Ticket(TWO_DAY_PRICE,2);
+//    }
+
+    public Ticket buyFourDayPassport(Integer handedMoney) {
+        buyPassport(handedMoney,FOUR_DAY_PRICE);
+        return new Ticket(FOUR_DAY_PRICE,4);
+    }
+
+    public Ticket buyNightOnlyTwoDayPassport(Integer handedMoney) {
+        buyPassport(handedMoney,buyNightOnlyTwoDay_PRICE);
+        return new Ticket(buyNightOnlyTwoDay_PRICE,2,true);
+    }
+
+    public int buyPassport(Integer handedMoney, Integer PRICE){
         if (quantity <= 0) {
             throw new TicketSoldOutException("Sold out");
         }
-        --quantity;
-        if (handedMoney < ONE_DAY_PRICE) {
+        //        --quantity; // ①の修正
+        if (handedMoney < PRICE) {
             throw new TicketShortMoneyException("Short money: " + handedMoney);
         }
+        change = handedMoney - PRICE;
         if (salesProceeds != null) { // second or more purchase
-            salesProceeds = salesProceeds + handedMoney; // 釣り銭見てる？
+            salesProceeds = salesProceeds + PRICE; // 釣り銭見てる？
+            --quantity; // ①の修正
         } else { // first purchase
-            salesProceeds = handedMoney;
+            salesProceeds = PRICE;
+            --quantity; // ①の修正
         }
+        return  change;
     }
 
     public static class TicketSoldOutException extends RuntimeException {
