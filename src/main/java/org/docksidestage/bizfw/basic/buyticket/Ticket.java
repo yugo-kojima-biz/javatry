@@ -15,6 +15,7 @@
  */
 package org.docksidestage.bizfw.basic.buyticket;
 
+// #1on1: 時間が空いても、続きの作業をスムーズにできるようにするのもトレーニング (2026/10/19)
 /**
  * @author jflute
  */
@@ -31,18 +32,25 @@ public class Ticket {
     // ===================================================================================
     //                                                                         Constructor
     //                                                                         ===========
-    public Ticket(int displayPrice) {
+    // TODO kojima OneDayのとき、availableCountが最後-1で終わるのが不統一 by jflute (2026/10/19)
+    // そもそも availableCount の初期値が OneDay だと 0 になるのがズレの原因。
+    // $TwoDayがこれを使ってるのを知らないで書いてたかも...
+    // BuyResultクラスのgetterの中でnewしてしまっているから、そこがわかりにくくなってる。
+    // あまりResultのような入れ物クラスの中でオブジェクトを作り出すってのはやらないので、
+    // 素直にBuyResultクラスを使う時も、Ticketのnewは、TicketBoothの中で良いかなと。
+    public Ticket(int displayPrice) { // for OneDay, TwoDay
         this.displayPrice = displayPrice;
     }
     // コンストラクタをオーバーロード(小声)...
     // 引数の型や数が違うと使える...?
     // 戻り値の型を変えただけではできない..?
-    public Ticket(int displayPrice, int availableCount) {
+    public Ticket(int displayPrice, int availableCount) { // for FourDay
         this.displayPrice = displayPrice;
         this.availableCount = availableCount;
     }
 
-    public Ticket(int displayPrice, int availableCount, boolean nightOnly) {
+     // #1on1: nightOnly専用のコンストラクター
+    public Ticket(int displayPrice, int availableCount, boolean nightOnly) { // for NightOnly
         this.displayPrice = displayPrice;
         this.availableCount = availableCount;
         this.nightOnly = nightOnly;

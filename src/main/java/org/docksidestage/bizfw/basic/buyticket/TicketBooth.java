@@ -164,10 +164,15 @@ public class TicketBooth {
 //        return  change;
 //    }
 
+    // TODO kojima 戻り値の不統一をどうにかしていきましょう by jflute (2026/10/19)
+    // #1on1: $戻り値の不統一、思いながら60分過ぎた (2026/10/19)
+    // "要件が曖昧なところがあれば、適切だと思われる仕様を決めても良いです"
+    // とあるので、統一しちゃって多いです。
+    
     // ④ test_class_moreFix_return_ticket()
     public Ticket buyOneDayPassport(Integer handedMoney) {
         buyPassport(handedMoney,ONE_DAY_PRICE);
-        return new Ticket(ONE_DAY_PRICE);
+        return new Ticket(ONE_DAY_PRICE, 1);
     }
 
     public TicketBuyResult buyTwoDayPassport(Integer handedMoney) {
@@ -195,15 +200,37 @@ public class TicketBooth {
         return new Ticket(buyNightOnlyTwoDay_PRICE,2,true);
     }
 
+    // TODO kojima 引数変数の名前は、基本小文字キャメルケース by jflute (2026/10/19)
+    // $何かの補完に引きづられたかも
+    // $JavaとかKotlinとかのキャメルケースのムードにまだ慣れてない
+    // キャメルケース: seaLand               // 通じる
+    // スネークケース: sea_land or SEA_LAND  // 通じにくい (アンスコつなぎ)
+    // ケバブケース: sea-land or SEA-LAND    // ほぼ通じない (ハイフンつなぎ)
+    //
+    // プログラムでは、キャメルケースが使われることが多い。
+    // ただ、スネークケースも局所的に使われたり、言語によってはメインで使われたり。
+    // DBのカラム名とかもスネークケースが多い。
+    //
+    // TODO kojima 内部処理なので、publicじゃなくてOK, privateで by jflute (2026/10/19)
+    // $油断した...
+    // #1on1: publicのbuyとprivateのbuyの先頭文字を変えて区別するテクニック (2026/10/19)
+    // メソッド一覧で紛れるってのと、会話上「buyメソッド」と読んだ時に紛れるので...
+    // e.g. doBuyPassport(実処理をしてる感), internalBuyPassport
+    // TODO kojima ↑にならって、メソッド名を変えてみてください by jflute (2026/10/19)
+    // 先に名前で区別を意識したら、public/private間違えなくなるかも
     public int buyPassport(Integer handedMoney, Integer PRICE){
         if (quantity <= 0) {
             throw new TicketSoldOutException("Sold out");
         }
-        //        --quantity; // ①の修正
+        //--quantity; // ①の修正
         if (handedMoney < PRICE) {
             throw new TicketShortMoneyException("Short money: " + handedMoney);
         }
         change = handedMoney - PRICE;
+
+        // #1on1: 在庫を減らすのは、売上計上と同時が業務的には良いとの話Good (2026/10/19)
+        // TODO kojima --quantityは、分岐してもどっちも同じなので...ifの外(後ろ)に by jflute (2026/10/19)
+        // (tips: 空行を空けて、salesProceedsとquantityがセットの処理だよ感を出す)
         if (salesProceeds != null) { // second or more purchase
             salesProceeds = salesProceeds + PRICE; // 釣り銭見てる？
             --quantity; // ①の修正
@@ -211,6 +238,7 @@ public class TicketBooth {
             salesProceeds = PRICE;
             --quantity; // ①の修正
         }
+
         return  change;
     }
 

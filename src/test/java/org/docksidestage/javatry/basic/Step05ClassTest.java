@@ -239,6 +239,17 @@ public class Step05ClassTest extends PlainTestCase {
         Integer sea = booth.getSalesProceeds();
         log(sea); // should be same as one-day price, visual check here
     }
+    
+    // #1on1: 二つの特徴的なバグ (2026/10/19)
+    // お金不足でもチケットが減る問題: 複数行の流れのバグ
+    //  → 比較的、見つけにくい (業務全体像がわかってないと見つけられない)
+    //    (現場のプログラムは高度に構造化されたりして、より見にくくなったり)
+    //    (しかも今回は、例外時に初めて顕在化するのでテストでも抜ける可能性が高い)
+    //
+    // 受け取ったお金の分だけ売上が増えていく問題: 単行のロジックバグ
+    //  → 比較的、見つけやすい
+    //
+    // レビューワーも実装者も同じで、意識しないと流れのバグは抜けやすい。
 
     /**
      * Make method for buying two-day passport (price is 13200). (which can return change as method return value)
@@ -290,13 +301,14 @@ public class Step05ClassTest extends PlainTestCase {
      * (TwoDayPassportもチケットをもらえませんでした。チケットとお釣りを戻すクラスを作って戻すようにしましょう)
      */
     public void test_class_moreFix_return_whole() {
+        // TODO kojima twoDayの動作確認をここでするようにしましょう by jflute (2026/10/19)
         // uncomment after modifying the method
-//        TicketBooth booth = new TicketBooth();
-//        int handedMoney = 20000;
-//        TicketBuyResult buyResult = booth.buyTwoDayPassport(handedMoney);
-//        Ticket twoDayPassport = buyResult.getTicket();
-//        int change = buyResult.getChange();
-//        log(twoDayPassport.getDisplayPrice() + change); // should be same as money → 20000
+        //TicketBooth booth = new TicketBooth();
+        //int handedMoney = 20000;
+        //TicketBuyResult buyResult = booth.buyTwoDayPassport(handedMoney);
+        //Ticket twoDayPassport = buyResult.getTicket();
+        //int change = buyResult.getChange();
+        //log(twoDayPassport.getDisplayPrice() + change); // should be same as money → 20000
     }
 
     /**
@@ -304,6 +316,7 @@ public class Step05ClassTest extends PlainTestCase {
      * (TwoDayPassportなのに一回しか利用できません。複数日数に対応できるようにTicketを修正しましょう)
      */
     public void test_class_moreFix_usePluralDays() {
+        // TODO kojima 複数日数の動作確認をここでするようにしましょう by jflute (2026/10/19)
         // your confirmation code here
 //        TicketBooth booth = new TicketBooth();
 //        Ticket twoDayPassport = booth.buyTwoDayPassport(20000);
@@ -313,7 +326,6 @@ public class Step05ClassTest extends PlainTestCase {
 //        log(twoDayPassport.isAlreadyIn()); // should be false
 //        twoDayPassport.doInPark();
 //        log(twoDayPassport.isAlreadyIn()); // should be true
-
     }
 
     /**
