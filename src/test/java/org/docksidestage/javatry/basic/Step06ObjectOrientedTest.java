@@ -27,6 +27,7 @@ import org.docksidestage.bizfw.basic.objanimal.loud.Loudable;
 import org.docksidestage.bizfw.basic.objanimal.runner.FastRunner;
 import org.docksidestage.unit.PlainTestCase;
 
+import org.docksidestage.bizfw.basic.buyticket.TicketBuyResult;
 /**
  * The test of object-oriented. <br>
  * Operate exercise as javadoc. If it's question style, write your answer before test execution. <br>
@@ -135,7 +136,8 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         // if step05 has been finished, you can use this code by jflute (2019/06/15)
         //Ticket ticket = booth.buyOneDayPassport(10000);
         booth.buyOneDayPassport(10000); // as temporary, remove if you finished step05
-        Ticket ticket = new Ticket(7400); // also here
+//        Ticket ticket = new Ticket(7400); // also here
+        Ticket ticket = new Ticket(7400, 1, false);
 
         // *buyOneDayPassport() has this process:
         //if (quantity <= 0) {
