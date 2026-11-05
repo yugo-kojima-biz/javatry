@@ -24,6 +24,8 @@ public class Ticket {
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
+    // TODO kojima nightOnlyは、状態じゃなくて固定データ、finalを付けてもいいかなと by jflute (2026/11/05)
+    // インスタンス変数には大きく、固定データ(マスター)と状態データがある。
     private final int displayPrice; // written on ticket, park guest can watch this
     private boolean alreadyIn; // true means this ticket is unavailable
     private int availableCount; // 追加
@@ -32,7 +34,7 @@ public class Ticket {
     // ===================================================================================
     //                                                                         Constructor
     //                                                                         ===========
-    // TODO done kojima OneDayのとき、availableCountが最後-1で終わるのが不統一 by jflute (2026/10/19)
+    // done kojima OneDayのとき、availableCountが最後-1で終わるのが不統一 by jflute (2026/10/19)
     // そもそも availableCount の初期値が OneDay だと 0 になるのがズレの原因。
     // $TwoDayがこれを使ってるのを知らないで書いてたかも...
     // BuyResultクラスのgetterの中でnewしてしまっているから、そこがわかりにくくなってる。
@@ -51,8 +53,7 @@ public class Ticket {
 
     // ↓↓↓↓↓こっちにまとめる↓↓↓↓↓
 
-     // #1on1: nightOnly専用のコンストラクター
-    public Ticket(int displayPrice, int availableCount, boolean nightOnly) { // for NightOnly
+    public Ticket(int displayPrice, int availableCount, boolean nightOnly) {
         this.displayPrice = displayPrice;
         this.availableCount = availableCount;
         this.nightOnly = nightOnly;
@@ -72,13 +73,29 @@ public class Ticket {
         availableCount --;
     }
 
+    // TODO kojima 修行++: isNightを引数で受け取らず、現在夜かどうかはメソッド内で解決しましょう by jflute (2026/11/05)
+    // isNightはisNightNowというニュアンス、現在夜かどうか？という判定。
+    // これは、呼び出し側がつど指定する必要性が本来ないはず。
+    // 現在夜かどうか？は使う人によって変わるものじゃない。
+    // し、使う人が細工していいものではない。
+    // って考えると、現在夜かどうか？は doInPark() の中で閉じて解決したいところ。
+    // だけど、そうすると UnitTest で確認がしづらくなりますので、そこをどうにか。
+    // (UnitTest の実行時間によらず、夜呼び出しと昼呼び出しの動作確認をできるようにしたい)
+    
+    // TODO kojima どうせNightのときにしか使わないメソッド by jflute (2026/11/05)
+    // Nightチケットで夜だったら入れて、昼だったら入れないを表現するメソッド。
+    // doInParkNightOnly(isNight) という感じで夜チケット専用のメソッドって明示したほうがわかりやすいかも。
     public void doInPark(boolean isNight) {
+        // TODO kojima  || availableCount <= 0 は現状 "念のため" チェックになっている by jflute (2026/11/05)
+        // 入れてもいいけどなくてもいい。doInPark()とdoInPark(isNight)で統一しましょう。
+        // availableCountの判定を残すなら、コメントで「availableCountの判定は念のため」って欲しい。
         if (alreadyIn || availableCount <= 0) {
             throw new IllegalStateException("Already in park by this ticket: displayedPrice=" + displayPrice);
         }
         if (nightOnly && !isNight) {
             throw new IllegalStateException("This ticket can only be used at night");
         }
+        // TODO kojima doInPark()と結果は同じだけど処理の仕方が違うの不統一なので統一しましょう by jflute (2026/11/05)
         availableCount --;
         if (availableCount == 0){
             alreadyIn = true;
@@ -92,6 +109,10 @@ public class Ticket {
         return displayPrice;
     }
 
+    // #1on1: いいね、alreadyInの概念をしっかりキープしている (2026/11/05)
+    // $決めちゃえばいいかなと、動き変だなと思ったらそのとき考えればいいかなと
+    // $いやコメント読んでた (コメント見て思い出した)
+    // OneDayのみ時代とTwoDayで複数日数対応した時代で、概念を細かく分けないといけなくなる話。
     public boolean isAlreadyIn() {
         return alreadyIn;
     }

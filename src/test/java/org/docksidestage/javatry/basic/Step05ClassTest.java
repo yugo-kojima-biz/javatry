@@ -301,7 +301,7 @@ public class Step05ClassTest extends PlainTestCase {
      * (TwoDayPassportもチケットをもらえませんでした。チケットとお釣りを戻すクラスを作って戻すようにしましょう)
      */
     public void test_class_moreFix_return_whole() {
-        // TODO done kojima twoDayの動作確認をここでするようにしましょう by jflute (2026/10/19)
+        // done kojima twoDayの動作確認をここでするようにしましょう by jflute (2026/10/19)
         // uncomment after modifying the method
         //TicketBooth booth = new TicketBooth();
         //int handedMoney = 20000;
@@ -324,7 +324,7 @@ public class Step05ClassTest extends PlainTestCase {
      * (TwoDayPassportなのに一回しか利用できません。複数日数に対応できるようにTicketを修正しましょう)
      */
     public void test_class_moreFix_usePluralDays() {
-        // TODO done kojima 複数日数の動作確認をここでするようにしましょう by jflute (2026/10/19)
+        // done kojima 複数日数の動作確認をここでするようにしましょう by jflute (2026/10/19)
         // your confirmation code here
 //        TicketBooth booth = new TicketBooth();
 //        Ticket twoDayPassport = booth.buyTwoDayPassport(20000);
@@ -372,6 +372,9 @@ public class Step05ClassTest extends PlainTestCase {
 
     // uncomment when you implement this exercise
     private void showTicketIfNeeds(Ticket ticket) {
+        // TODO kojima $値段変更したら変えなきゃいけない by jflute (2026/11/05)
+        // TwoDayの値段変更だけだろうか？他のチケットで同じ値段になったら...
+        // 将来どんなチケット種別が追加されても、このifは修正しなくても良いようにしたい。
         if (ticket.getDisplayPrice() == 13200) { // write determination for two-day passport
             log("two-day passport");
         } else {

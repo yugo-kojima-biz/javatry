@@ -202,7 +202,7 @@ public class TicketBooth {
 //        return new Ticket(buyNightOnlyTwoDay_PRICE,2,true);
 //    }
 //
-//    // TODO done kojima 引数変数の名前は、基本小文字キャメルケース by jflute (2026/10/19)
+//    // done kojima 引数変数の名前は、基本小文字キャメルケース by jflute (2026/10/19)
 //    // $何かの補完に引きづられたかも
 //    // $JavaとかKotlinとかのキャメルケースのムードにまだ慣れてない
 //    // キャメルケース: seaLand               // 通じる
@@ -213,12 +213,12 @@ public class TicketBooth {
 //    // ただ、スネークケースも局所的に使われたり、言語によってはメインで使われたり。
 //    // DBのカラム名とかもスネークケースが多い。
 //    //
-//    // TODO done kojima 内部処理なので、publicじゃなくてOK, privateで by jflute (2026/10/19)
+//    // done kojima 内部処理なので、publicじゃなくてOK, privateで by jflute (2026/10/19)
 //    // $油断した...
 //    // #1on1: publicのbuyとprivateのbuyの先頭文字を変えて区別するテクニック (2026/10/19)
 //    // メソッド一覧で紛れるってのと、会話上「buyメソッド」と読んだ時に紛れるので...
 //    // e.g. doBuyPassport(実処理をしてる感), internalBuyPassport
-//    // TODO done kojima ↑にならって、メソッド名を変えてみてください by jflute (2026/10/19)
+//    // done kojima ↑にならって、メソッド名を変えてみてください by jflute (2026/10/19)
 //    // 先に名前で区別を意識したら、public/private間違えなくなるかも
 //    public int buyPassport(Integer handedMoney, Integer PRICE){
 //        if (quantity <= 0) {
@@ -231,7 +231,7 @@ public class TicketBooth {
 //        change = handedMoney - PRICE;
 //
 //        // #1on1: 在庫を減らすのは、売上計上と同時が業務的には良いとの話Good (2026/10/19)
-//        // TODO done kojima --quantityは、分岐してもどっちも同じなので...ifの外(後ろ)に by jflute (2026/10/19)
+//        // done kojima --quantityは、分岐してもどっちも同じなので...ifの外(後ろ)に by jflute (2026/10/19)
 //        // (tips: 空行を空けて、salesProceedsとquantityがセットの処理だよ感を出す)
 //        if (salesProceeds != null) { // second or more purchase
 //            salesProceeds = salesProceeds + PRICE; // 釣り銭見てる？
@@ -263,12 +263,30 @@ public class TicketBooth {
     }
 
     private TicketBuyResult doBuyPassport(int handedMoney, int price, int availableCount, boolean nightOnly){ //内部処理→private!!!!!
+        // TODO kojima インデントが変なので直しましょう by jflute (2026/11/05)
+        // $なんで気づかなかったんだろう、AIに任せてるから意識が薄れてるかも
+        // 自動フォーマッターが導入されていれば同じく意識は薄れたりするかも
+        // 書いてる時のコード意識と、読んでる時のコード意識ってちょっと違うもの。
+        // 出来上がった直後に、数秒でも読んでる時のコード意識になって見直す。
+        // gitの差分をパッと見るのも手。(jfluteの場合はすぐできるようにショートカット設定してる)
         if (quantity <= 0) {
             throw new TicketSoldOutException("Sold out");
             }
             if (handedMoney < price) {
                 throw new TicketShortMoneyException("Short money: " + handedMoney);
             }
+            // TODO kojima 変数のスコープはできるだけ短く by jflute (2026/11/05)
+            // changeがupdatedSalesProceedsの計算で使えちゃったりするので間違いやすい。
+            // また、updatedSalesProceedsで使ってるのかな？って少し思ってしまう。
+            // キリがない話で０にすることはできないんだけど、
+            // TicketとかTicketBuyResultがスコープ長いほうがマシ。
+            // 間違って指定したときでもたいていコンパイルエラーになる。
+            // intとかStringとかがスコープ長いと間違いやすい。
+            //
+            // さらにアドバンス: メソッド小分けしてさらにスコープノイズを減らすやり方。
+            // メソッド名で業務処理を表現して、引数で必要な値を表現する。
+            // メソッド小分けで変数のスコープをコントロールする。
+            //
             int change = handedMoney - price;
             int updatedSalesProceeds;
             if (salesProceeds == null) {
