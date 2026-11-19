@@ -372,10 +372,10 @@ public class Step05ClassTest extends PlainTestCase {
 
     // uncomment when you implement this exercise
     private void showTicketIfNeeds(Ticket ticket) {
-        // TODO kojima $値段変更したら変えなきゃいけない by jflute (2026/11/05)
+        // TODO done kojima $値段変更したら変えなきゃいけない by jflute (2026/11/05)
         // TwoDayの値段変更だけだろうか？他のチケットで同じ値段になったら...
         // 将来どんなチケット種別が追加されても、このifは修正しなくても良いようにしたい。
-        if (ticket.getDisplayPrice() == 13200) { // write determination for two-day passport
+        if (ticket.getTicketType() == Ticket.TicketType.TWO_DAY) { // 気持ち悪い...(小声)
             log("two-day passport");
         } else {
             log("other");
@@ -413,11 +413,11 @@ public class Step05ClassTest extends PlainTestCase {
         // your confirmation code here
         TicketBooth booth = new TicketBooth();
         Ticket NightOnlyTwoDayPassport = booth.buyNightOnlyTwoDayPassport(25000).getTicket();
-        NightOnlyTwoDayPassport.doInPark(true); // isNight = true
+        NightOnlyTwoDayPassport.doInParkNightOnly(true); // isNight = true
         log(NightOnlyTwoDayPassport.isAlreadyIn());
-        NightOnlyTwoDayPassport.doInPark(false); // isNight = false
+        NightOnlyTwoDayPassport.doInParkNightOnly(false); // isNight = false
         log(NightOnlyTwoDayPassport.isAlreadyIn());
-        NightOnlyTwoDayPassport.doInPark(isNightNow()); // isNight = ...今は？
+        NightOnlyTwoDayPassport.doInParkNightOnly(isNightNow()); // isNight = ...今は？
         log(NightOnlyTwoDayPassport.isAlreadyIn());
     }
 
@@ -449,7 +449,16 @@ public class Step05ClassTest extends PlainTestCase {
     // o 外向けのインターフェース(メソッド呼び出し方法など)もあまり変えない
     //   → でも、自分で修正できる範囲でまるごと責任を持てるなら変えてもOK
     public void test_class_moreFix_yourRefactoring() {
-        // your confirmation code here
+        // your confirmation code here → 動作確認用?として書きましたが相違ございましたら恐縮です
+//        TicketBooth booth = new TicketBooth();
+//        TicketBuyResult result = booth.buyTwoDayPassport(20000);
+//        Ticket ticket = result.getTicket();
+//
+//        log(ticket.getTicketType());
+//        log(ticket.getDisplayPrice());
+//        log(result.getChange());
+//        log(booth.getQuantity());
+//        log(booth.getSalesProceeds());
     }
 
     /**

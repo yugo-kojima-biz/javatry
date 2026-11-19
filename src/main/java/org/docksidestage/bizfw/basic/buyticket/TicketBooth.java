@@ -166,7 +166,7 @@ public class TicketBooth {
 
 //    // *******:ここから**********
 //
-//    // TODO kojima 戻り値の不統一をどうにかしていきましょう by jflute (2026/10/19)
+//    // TODO done kojima 戻り値の不統一をどうにかしていきましょう by jflute (2026/10/19)
 //    // #1on1: $戻り値の不統一、思いながら60分過ぎた (2026/10/19)
 //    // "要件が曖昧なところがあれば、適切だと思われる仕様を決めても良いです"
 //    // とあるので、統一しちゃって多いです。
@@ -247,23 +247,23 @@ public class TicketBooth {
 //    // *******:ここまで書き直します↓**********
 
     public TicketBuyResult buyOneDayPassport(int handedMoney) {
-        return doBuyPassport(handedMoney, ONE_DAY_PRICE, 1, false); // doの文脈...内部処理だからという記憶...
+        return doBuyPassport(handedMoney, ONE_DAY_PRICE, 1, false, Ticket.TicketType.ONE_DAY); // doの文脈...内部処理だからという記憶...
     }
 
     public TicketBuyResult buyTwoDayPassport(int handedMoney) {
-        return doBuyPassport(handedMoney, TWO_DAY_PRICE, 2, false); // doの文脈...内部処理だからという記憶...
+        return doBuyPassport(handedMoney, TWO_DAY_PRICE, 2, false, Ticket.TicketType.TWO_DAY); // doの文脈...内部処理だからという記憶...
     }
 
     public TicketBuyResult buyFourDayPassport(int handedMoney) {
-        return doBuyPassport(handedMoney, FOUR_DAY_PRICE, 4, false); // doの文脈...内部処理だからという記憶...
+        return doBuyPassport(handedMoney, FOUR_DAY_PRICE, 4, false, Ticket.TicketType.FOUR_DAY); // doの文脈...内部処理だからという記憶...
     }
 
     public TicketBuyResult buyNightOnlyTwoDayPassport(int handedMoney) {
-        return doBuyPassport(handedMoney, NIGHT_ONLY_TWO_DAY_PRICE, 2, true); // doの文脈...内部処理だからという記憶...
+        return doBuyPassport(handedMoney, NIGHT_ONLY_TWO_DAY_PRICE, 2, true, Ticket.TicketType.NIGHT_ONLY_TWO_DAY); // doの文脈...内部処理だからという記憶...
     }
 
-    private TicketBuyResult doBuyPassport(int handedMoney, int price, int availableCount, boolean nightOnly){ //内部処理→private!!!!!
-        // TODO kojima インデントが変なので直しましょう by jflute (2026/11/05)
+    private TicketBuyResult doBuyPassport(int handedMoney, int price, int availableCount, boolean nightOnly, Ticket.TicketType type){ //内部処理→private!!!!!
+        // TODO done kojima インデントが変なので直しましょう by jflute (2026/11/05)
         // $なんで気づかなかったんだろう、AIに任せてるから意識が薄れてるかも
         // 自動フォーマッターが導入されていれば同じく意識は薄れたりするかも
         // 書いてる時のコード意識と、読んでる時のコード意識ってちょっと違うもの。
@@ -271,37 +271,35 @@ public class TicketBooth {
         // gitの差分をパッと見るのも手。(jfluteの場合はすぐできるようにショートカット設定してる)
         if (quantity <= 0) {
             throw new TicketSoldOutException("Sold out");
-            }
-            if (handedMoney < price) {
-                throw new TicketShortMoneyException("Short money: " + handedMoney);
-            }
-            // TODO kojima 変数のスコープはできるだけ短く by jflute (2026/11/05)
-            // changeがupdatedSalesProceedsの計算で使えちゃったりするので間違いやすい。
-            // また、updatedSalesProceedsで使ってるのかな？って少し思ってしまう。
-            // キリがない話で０にすることはできないんだけど、
-            // TicketとかTicketBuyResultがスコープ長いほうがマシ。
-            // 間違って指定したときでもたいていコンパイルエラーになる。
-            // intとかStringとかがスコープ長いと間違いやすい。
-            //
-            // さらにアドバンス: メソッド小分けしてさらにスコープノイズを減らすやり方。
-            // メソッド名で業務処理を表現して、引数で必要な値を表現する。
-            // メソッド小分けで変数のスコープをコントロールする。
-            //
-            int change = handedMoney - price;
-            int updatedSalesProceeds;
-            if (salesProceeds == null) {
-                updatedSalesProceeds = price;
-            } else {
-                updatedSalesProceeds = salesProceeds + price;
-            }
+        }
+        if (handedMoney < price) {
+            throw new TicketShortMoneyException("Short money: " + handedMoney);
+        }
+        // TODO done kojima 変数のスコープはできるだけ短く by jflute (2026/11/05)
+        // changeがupdatedSalesProceedsの計算で使えちゃったりするので間違いやすい。
+        // また、updatedSalesProceedsで使ってるのかな？って少し思ってしまう。
+        // キリがない話で０にすることはできないんだけど、
+        // TicketとかTicketBuyResultがスコープ長いほうがマシ。
+        // 間違って指定したときでもたいていコンパイルエラーになる。
+        // intとかStringとかがスコープ長いと間違いやすい。
+        //
+        // さらにアドバンス: メソッド小分けしてさらにスコープノイズを減らすやり方。
+        // メソッド名で業務処理を表現して、引数で必要な値を表現する。
+        // メソッド小分けで変数のスコープをコントロールする。
+        //
+        int updatedSalesProceeds;
+        if (salesProceeds == null) {
+            updatedSalesProceeds = price;
+        } else {
+            updatedSalesProceeds = salesProceeds + price;
+        }
+        salesProceeds = updatedSalesProceeds;
 
-            Ticket ticket = new Ticket(price, availableCount, nightOnly);
-            TicketBuyResult result = new TicketBuyResult(ticket, change);
+        TicketBuyResult result = createBuyResult(handedMoney, price, availableCount, nightOnly, type);
 
-            --quantity;
-            salesProceeds = updatedSalesProceeds;
+        --quantity;
 
-            return result;
+        return result;
         }
 
         public static class TicketSoldOutException extends RuntimeException {
@@ -320,6 +318,12 @@ public class TicketBooth {
         public TicketShortMoneyException(String msg) {
             super(msg);
         }
+    }
+
+    private TicketBuyResult createBuyResult(int handedMoney, int price, int availableCount, boolean nightOnly, Ticket.TicketType type) {
+        int change = handedMoney - price;
+        Ticket ticket = new Ticket(price, availableCount, nightOnly, type);
+        return new TicketBuyResult(ticket, change);
     }
 
     // ===================================================================================

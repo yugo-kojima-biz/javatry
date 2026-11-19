@@ -24,12 +24,12 @@ public class Ticket {
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
-    // TODO kojima nightOnlyは、状態じゃなくて固定データ、finalを付けてもいいかなと by jflute (2026/11/05)
+    // TODO done kojima nightOnlyは、状態じゃなくて固定データ、finalを付けてもいいかなと by jflute (2026/11/05)
     // インスタンス変数には大きく、固定データ(マスター)と状態データがある。
     private final int displayPrice; // written on ticket, park guest can watch this
     private boolean alreadyIn; // true means this ticket is unavailable
     private int availableCount; // 追加
-    private boolean nightOnly; // 追加
+    private final boolean nightOnly; // 追加
 
     // ===================================================================================
     //                                                                         Constructor
@@ -52,11 +52,19 @@ public class Ticket {
 //    }
 
     // ↓↓↓↓↓こっちにまとめる↓↓↓↓↓
+    public enum TicketType {
+       ONE_DAY, TWO_DAY, FOUR_DAY, NIGHT_ONLY_TWO_DAY
+    }
+    private final TicketType type;
 
-    public Ticket(int displayPrice, int availableCount, boolean nightOnly) {
+    public Ticket(int displayPrice, int availableCount, boolean nightOnly, TicketType type) {
+        if (availableCount <= 0) {
+            throw new IllegalArgumentException("availableCount must be greater than zero: " + availableCount);
+        }
         this.displayPrice = displayPrice;
         this.availableCount = availableCount;
         this.nightOnly = nightOnly;
+        this.type = type;
     }
 
 
@@ -82,31 +90,62 @@ public class Ticket {
     // だけど、そうすると UnitTest で確認がしづらくなりますので、そこをどうにか。
     // (UnitTest の実行時間によらず、夜呼び出しと昼呼び出しの動作確認をできるようにしたい)
     
-    // TODO kojima どうせNightのときにしか使わないメソッド by jflute (2026/11/05)
+    // TODO done kojima どうせNightのときにしか使わないメソッド by jflute (2026/11/05)
     // Nightチケットで夜だったら入れて、昼だったら入れないを表現するメソッド。
     // doInParkNightOnly(isNight) という感じで夜チケット専用のメソッドって明示したほうがわかりやすいかも。
-    public void doInPark(boolean isNight) {
-        // TODO kojima  || availableCount <= 0 は現状 "念のため" チェックになっている by jflute (2026/11/05)
+    public void doInParkNightOnly(boolean isNight) {
+        // TODO done kojima  || availableCount <= 0 は現状 "念のため" チェックになっている by jflute (2026/11/05)
         // 入れてもいいけどなくてもいい。doInPark()とdoInPark(isNight)で統一しましょう。
         // availableCountの判定を残すなら、コメントで「availableCountの判定は念のため」って欲しい。
-        if (alreadyIn || availableCount <= 0) {
+        if (alreadyIn) {
             throw new IllegalStateException("Already in park by this ticket: displayedPrice=" + displayPrice);
         }
         if (nightOnly && !isNight) {
             throw new IllegalStateException("This ticket can only be used at night");
         }
-        // TODO kojima doInPark()と結果は同じだけど処理の仕方が違うの不統一なので統一しましょう by jflute (2026/11/05)
-        availableCount --;
-        if (availableCount == 0){
+        // TODO done kojima doInPark()と結果は同じだけど処理の仕方が違うの不統一なので統一しましょう by jflute (2026/11/05)
+        if (availableCount == 1){
             alreadyIn = true;
         }
+        availableCount --;
     }
+
+    // ===================以下もっと改良==========================
+
+//    public void doInPark() {
+//        checkEnableEnter();
+//        consumeOnVisit();
+//    }
+//
+//    public void doInParkNightOnly(boolean isNight) {
+//        checkEnableEnter();
+//        if (nightOnly && !isNight) {
+//            throw new IllegalStateException("This ticket can only be used at night");
+//        }
+//        consumeOnVisit();
+//    }
+//
+//    private void checkEnableEnter() {
+//        if (alreadyIn || availableCount <= 0) {
+//            throw new IllegalStateException("Already in park by this ticket: price= " + displayPrice);
+//        }
+//    }
+//
+//    private void consumeOnVisit() {
+//        availableCount --;
+//        if (availableCount == 0) {
+//            alreadyIn = true;
+//        }
+//    }
 
     // ===================================================================================
     //                                                                            Accessor
     //                                                                            ========
     public int getDisplayPrice() {
         return displayPrice;
+    }
+    public TicketType getTicketType() {
+        return type;
     }
 
     // #1on1: いいね、alreadyInの概念をしっかりキープしている (2026/11/05)
