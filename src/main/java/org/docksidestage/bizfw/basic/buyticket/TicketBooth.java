@@ -15,6 +15,8 @@
  */
 package org.docksidestage.bizfw.basic.buyticket;
 
+// TODO kojima javadoc, author追加お願いします by jflute (2026/11/24)
+// (他も見直してみてください)
 /**
  * @author jflute
  */
@@ -71,12 +73,6 @@ public class TicketBooth {
     // * @throws TicketSoldOutException ブース内のチケットが売り切れだったら
     // * @throws TicketShortMoneyException 買うのに金額が足りなかったら
     // */
-    /**
-     * Buy one-day passport, method for park guest.
-     * @param handedMoney The money (amount) handed over from park guest. (NotNull, NotMinus)
-     * @throws TicketSoldOutException When ticket in booth is sold out.
-     * @throws TicketShortMoneyException When the specified money is short for purchase.
-     */
     // 在庫の量を一個減らしてhandedMoneyを売上？として計上する →お金足りなくても在庫あげちゃう？
     // ① test_class_letsFix_ticketQuantityReduction()
 //    public void buyOneDayPassport(Integer handedMoney) {
@@ -166,7 +162,7 @@ public class TicketBooth {
 
 //    // *******:ここから**********
 //
-//    // TODO done kojima 戻り値の不統一をどうにかしていきましょう by jflute (2026/10/19)
+//    // done kojima 戻り値の不統一をどうにかしていきましょう by jflute (2026/10/19)
 //    // #1on1: $戻り値の不統一、思いながら60分過ぎた (2026/10/19)
 //    // "要件が曖昧なところがあれば、適切だと思われる仕様を決めても良いです"
 //    // とあるので、統一しちゃって多いです。
@@ -246,6 +242,13 @@ public class TicketBooth {
 //
 //    // *******:ここまで書き直します↓**********
 
+    // TODO kojima JavaDoc, 戻り値を追加したので、@returnを追加してみましょう by jflute (2026/11/24)
+    /**
+     * Buy one-day passport, method for park guest.
+     * @param handedMoney The money (amount) handed over from park guest. (NotNull, NotMinus)
+     * @throws TicketSoldOutException When ticket in booth is sold out.
+     * @throws TicketShortMoneyException When the specified money is short for purchase.
+     */
     public TicketBuyResult buyOneDayPassport(int handedMoney) {
         return doBuyPassport(handedMoney, ONE_DAY_PRICE, 1, false, Ticket.TicketType.ONE_DAY); // doの文脈...内部処理だからという記憶...
     }
@@ -263,7 +266,7 @@ public class TicketBooth {
     }
 
     private TicketBuyResult doBuyPassport(int handedMoney, int price, int availableCount, boolean nightOnly, Ticket.TicketType type){ //内部処理→private!!!!!
-        // TODO done kojima インデントが変なので直しましょう by jflute (2026/11/05)
+        // done kojima インデントが変なので直しましょう by jflute (2026/11/05)
         // $なんで気づかなかったんだろう、AIに任せてるから意識が薄れてるかも
         // 自動フォーマッターが導入されていれば同じく意識は薄れたりするかも
         // 書いてる時のコード意識と、読んでる時のコード意識ってちょっと違うもの。
@@ -275,7 +278,7 @@ public class TicketBooth {
         if (handedMoney < price) {
             throw new TicketShortMoneyException("Short money: " + handedMoney);
         }
-        // TODO done kojima 変数のスコープはできるだけ短く by jflute (2026/11/05)
+        // done kojima 変数のスコープはできるだけ短く by jflute (2026/11/05)
         // changeがupdatedSalesProceedsの計算で使えちゃったりするので間違いやすい。
         // また、updatedSalesProceedsで使ってるのかな？って少し思ってしまう。
         // キリがない話で０にすることはできないんだけど、
@@ -287,21 +290,71 @@ public class TicketBooth {
         // メソッド名で業務処理を表現して、引数で必要な値を表現する。
         // メソッド小分けで変数のスコープをコントロールする。
         //
-        int updatedSalesProceeds;
+        // #1on1: updatedSalesProceedsはあってもいいけど、なくてもいい (2026/11/24)
+        // というか変数を作らなくて良いなら作らないほうが良い。(もちろん見栄えのために作ってもいいんだけど)
+        //int updatedSalesProceeds;
+        //if (salesProceeds == null) {
+        //    updatedSalesProceeds = price;
+        //} else {
+        //    updatedSalesProceeds = salesProceeds + price;
+        //}
+        //salesProceeds = updatedSalesProceeds;
+        // ↓↓↓
         if (salesProceeds == null) {
-            updatedSalesProceeds = price;
+            salesProceeds = price;
         } else {
-            updatedSalesProceeds = salesProceeds + price;
+            salesProceeds = salesProceeds + price;
         }
-        salesProceeds = updatedSalesProceeds;
+        // #1on1: $三項演算子を使って実装できるのか？ (2026/11/24)
+        // e.g.
+        // A. salesProceeds = salesProceeds == null ? price : salesProceeds + price;
+        // B. salesProceeds = (salesProceeds == null ? 0 : salesProceeds) + price;
+        // $三項演算子をよむのちょっとドキドキする
+        // $5月の研修で初めて三項演算子を知った
+        // あくまで個人の自由の許容範囲内ではあるけれども...
+        // jfluteの感覚だと、このケースだとどちらかというと、三項演算子の方が少し込み入ってるので避けるかも。
+        // まあ要は、三項演算子で書けるからといって必ず書くわけじゃない。見やすさを配慮して使ったり使わなかったり。
+        // $足し算が入ってるから...
+        // そうそうそうそうそうそうそう曹操。素晴らしい。そのとおり計算が入っているので込み入りやすい。
+        // ただ選ぶだけの分岐なら三項演算子でもシンプルになるが計算が入ってるとちょっとややしくなりやすい。
+        // なので以下みたいに分離して、足す値だけを導出するのに三項演算子を使うというのもありかも。
+        //
+        // B':
+        // int addedProceeds = (salesProceeds == null ? 0 : salesProceeds);
+        // salesProceeds = addedProceeds + price;
+        //
+        // でもまあ、そんなに積極的に三項演算子は使わなくても良いと思う。(みもふたもない)
 
+        // #1on1: チケット発行して在庫を減らす、と考えたらこの二つが近しい仲 (2026/11/24)
+        // $心が二つある(^^
+        // $質問: createBuyResult()の中で --quantity できるか？
+        // 文法的に可能。チケットの発行と在庫を減らしをもっと近しくするならそういう考え方もあり
         TicketBuyResult result = createBuyResult(handedMoney, price, availableCount, nightOnly, type);
-
-        --quantity;
+        // #1on1: createBuyResult() のチケット発行と同時にやることにした (2026/11/24)
+        //--quantity;
 
         return result;
-        }
+    }
 
+    private TicketBuyResult createBuyResult(int handedMoney, int price, int availableCount, boolean nightOnly, Ticket.TicketType type) {
+        int change = calculateChange(handedMoney, price);
+        Ticket ticket = issueTicket(price, availableCount, nightOnly, type);
+        return new TicketBuyResult(ticket, change);
+    }
+
+    private int calculateChange(int handedMoney, int price) {
+        return handedMoney - price;
+    }
+
+    private Ticket issueTicket(int price, int availableCount, boolean nightOnly, Ticket.TicketType type) {
+        // #1on1: チケットの発行と在庫を減らしをもっと近しくする考え方をベースに一緒に実装 (2026/11/24)
+        Ticket ticket = new Ticket(price, availableCount, nightOnly, type);
+        --quantity;
+        return ticket;
+    }
+
+// TODO kojima まだインデントが変なところあり by jflute (2026/11/24)
+//ここから↓
         public static class TicketSoldOutException extends RuntimeException {
 
             private static final long serialVersionUID = 1L;
@@ -312,18 +365,12 @@ public class TicketBooth {
         }
 
         public static class TicketShortMoneyException extends RuntimeException {
-
+// ここまで↑
         private static final long serialVersionUID = 1L;
 
         public TicketShortMoneyException(String msg) {
             super(msg);
         }
-    }
-
-    private TicketBuyResult createBuyResult(int handedMoney, int price, int availableCount, boolean nightOnly, Ticket.TicketType type) {
-        int change = handedMoney - price;
-        Ticket ticket = new Ticket(price, availableCount, nightOnly, type);
-        return new TicketBuyResult(ticket, change);
     }
 
     // ===================================================================================

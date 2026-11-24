@@ -372,14 +372,33 @@ public class Step05ClassTest extends PlainTestCase {
 
     // uncomment when you implement this exercise
     private void showTicketIfNeeds(Ticket ticket) {
-        // TODO done kojima $値段変更したら変えなきゃいけない by jflute (2026/11/05)
+        // done kojima $値段変更したら変えなきゃいけない by jflute (2026/11/05)
         // TwoDayの値段変更だけだろうか？他のチケットで同じ値段になったら...
         // 将来どんなチケット種別が追加されても、このifは修正しなくても良いようにしたい。
+        // #1on1: $こういう条件式が慣れてない...見た目 (2026/11/24)
+        // $Ticket.TicketTypeって続くのが冗長な感じがする...意味はわかるけど...
+        // 今Ticketの中でTicketTypeを定義しているので、識別するのにTicket.TicketTypeになってしまう。
+        // なので、"Ticket."をなくすためには、TicketTypeを独立したクラス(ファイル)で定義すると良い。
+        // buyticketパッケージに TicketType.java を作って、そこで TicketType enum を定義すると良い。
+        // $こうだったら気持ち悪さちょっとなくなるかも
+        // A. ticket.isTwoDayPassport()
+        // B. ticket.isType(TicketType.TWO_DAY)
+        //
+        // ↑でも全然問題ないです。
+        // よく使う判定とか、判定方法を隠蔽したいとかであれば上記のようにメソッドで表現するのも全然アリ。
+        //
+        // 一方で、これがStringとかintとかだったら、メソッドでラップした方がベターって感じになるが...
+        // enumなので間違いをあまり起こさないので、そこまでめくじら立てる必要もないとも言える。
+        //
+        // TODO kojima それでは、今回はとりあえず "Ticket." をなくすだけやってみましょう by jflute (2026/11/24)
         if (ticket.getTicketType() == Ticket.TicketType.TWO_DAY) { // 気持ち悪い...(小声)
             log("two-day passport");
         } else {
             log("other");
         }
+        // #1on1: 実務でも、理想形で実装したわけじゃない、ってのをコメントで示すのはGood (2026/11/24)
+        // でないと、後で読んだ人が「こう実装しないといけないんだ、このやり方じゃないといけないんだ」って思ってしまう。
+        // jfluteのfor_nowタグを入れて実装者ジレンマをコメントで残しておく手法を紹介。
     }
 
     // ===================================================================================
@@ -450,6 +469,7 @@ public class Step05ClassTest extends PlainTestCase {
     //   → でも、自分で修正できる範囲でまるごと責任を持てるなら変えてもOK
     public void test_class_moreFix_yourRefactoring() {
         // your confirmation code here → 動作確認用?として書きましたが相違ございましたら恐縮です
+        // #1on1: そういう意味でOKです！ぜひ動作確認してみてください (2026/11/24)
 //        TicketBooth booth = new TicketBooth();
 //        TicketBuyResult result = booth.buyTwoDayPassport(20000);
 //        Ticket ticket = result.getTicket();
@@ -470,6 +490,8 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_moreFix_yourSuperJavaDoc() {
         // your confirmation code here
+        // #1on1: ここでは、JavaDocをエディター上で確認するためのコードを書くみたいな感じでOKです (2026/11/24)
+        //  e.g. new TicketBooth().buyOneDayPassport(11);
     }
 
     // ===================================================================================

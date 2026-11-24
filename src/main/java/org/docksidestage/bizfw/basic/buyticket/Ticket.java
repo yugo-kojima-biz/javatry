@@ -16,6 +16,7 @@
 package org.docksidestage.bizfw.basic.buyticket;
 
 // #1on1: 時間が空いても、続きの作業をスムーズにできるようにするのもトレーニング (2026/10/19)
+// TODO kojima javadoc, author追加お願いします by jflute (2026/11/24)
 /**
  * @author jflute
  */
@@ -24,7 +25,7 @@ public class Ticket {
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
-    // TODO done kojima nightOnlyは、状態じゃなくて固定データ、finalを付けてもいいかなと by jflute (2026/11/05)
+    // done kojima nightOnlyは、状態じゃなくて固定データ、finalを付けてもいいかなと by jflute (2026/11/05)
     // インスタンス変数には大きく、固定データ(マスター)と状態データがある。
     private final int displayPrice; // written on ticket, park guest can watch this
     private boolean alreadyIn; // true means this ticket is unavailable
@@ -50,9 +51,37 @@ public class Ticket {
 //        this.displayPrice = displayPrice;
 //        this.availableCount = availableCount;
 //    }
-
+    // #1on1: メンターのコメント... (2026/11/24)
+    // の通り、引数を変えるとコンストラクターやメソッドは同じ名前で定義できる。
+    // つまり、メソッドの識別子って、メソッド名だけじゃなくて引数も入れて識別子。
+    // オーバーロードできた方が便利な場面が時々あるのでそういう文法が用意されている。
+    // e.g.
+    //  System.out.println("a");
+    //  System.out.println(1);
+    // ただ、"コードを余計に複雑にする恐れがあるので基本は使いたくない手法の一つ"
+    // というのは(世の中一般)その通り。
+    // オーバーロードは引数の形だけで違いを表現することになっちゃうので...
+    // メソッドの業務的な違いの意味が伝わりにくくなる。
+    // printlnみたいな業務的な違いが発生しない事務的なオーバーロードだったらいいけど、
+    // 今回みたいにFourDay用のコンストラクターとか、Night用のコンストラクターとか、
+    // 業務的な用途の違いをオーバーロードで表現すると、名前で表現できないからわかりにくい。
+    // " // for FourDay" みたいなコメントで補完するってことは、わかりにくいってこと。
+    // なので避けられるなら避けたいところ。(絶対避けなきゃいけないわけじゃないけど)
+    // jfluteも、使ってるところはちょこちょこあるけど...
+    // 避けられるなら避けるみたいな感じで。
+    // (小声: staticのFactoryメソッドなどで隠蔽するとかそういう小テクニックはあるが)
+    // なので、今回はすでに一つコンストラクターに集約されているので、それで良いと思う。
+    //
+    // $Factoryメソッド聞いたことある
+    // createBuyResult()がFactoryメソッドに近いというかそう言ってもいい。
+    // インスタンスを生成することが目的にメソッド。
+    //
+    // $試行錯誤の傷跡としては良いのかな
+    // そのとおり！試行錯誤で色々な道を辿ることでプロセスごと理解していくことになるのでGood。
+    
     // ↓↓↓↓↓こっちにまとめる↓↓↓↓↓
     public enum TicketType {
+        // TODO jflute 次回1on1にて、enum自体の仕組みのお話をする予定 (2026/11/24)
        ONE_DAY, TWO_DAY, FOUR_DAY, NIGHT_ONLY_TWO_DAY
     }
     private final TicketType type;
@@ -90,11 +119,11 @@ public class Ticket {
     // だけど、そうすると UnitTest で確認がしづらくなりますので、そこをどうにか。
     // (UnitTest の実行時間によらず、夜呼び出しと昼呼び出しの動作確認をできるようにしたい)
     
-    // TODO done kojima どうせNightのときにしか使わないメソッド by jflute (2026/11/05)
+    // done kojima どうせNightのときにしか使わないメソッド by jflute (2026/11/05)
     // Nightチケットで夜だったら入れて、昼だったら入れないを表現するメソッド。
     // doInParkNightOnly(isNight) という感じで夜チケット専用のメソッドって明示したほうがわかりやすいかも。
     public void doInParkNightOnly(boolean isNight) {
-        // TODO done kojima  || availableCount <= 0 は現状 "念のため" チェックになっている by jflute (2026/11/05)
+        // done kojima  || availableCount <= 0 は現状 "念のため" チェックになっている by jflute (2026/11/05)
         // 入れてもいいけどなくてもいい。doInPark()とdoInPark(isNight)で統一しましょう。
         // availableCountの判定を残すなら、コメントで「availableCountの判定は念のため」って欲しい。
         if (alreadyIn) {
@@ -103,13 +132,17 @@ public class Ticket {
         if (nightOnly && !isNight) {
             throw new IllegalStateException("This ticket can only be used at night");
         }
-        // TODO done kojima doInPark()と結果は同じだけど処理の仕方が違うの不統一なので統一しましょう by jflute (2026/11/05)
+        // done kojima doInPark()と結果は同じだけど処理の仕方が違うの不統一なので統一しましょう by jflute (2026/11/05)
+        // TODO kojima まだ判定のロジックが統一できていない by jflute (2026/11/24)
         if (availableCount == 1){
             alreadyIn = true;
         }
         availableCount --;
     }
 
+    // TODO kojima 以下の改良版を本線にしちゃってもOKです by jflute (2026/11/24)
+    // (上をコメントアウトして思い出に残して、以下を有効にする)
+    // (改良版、メソッドで再利用されていて非常にわかりすいコードになってるし)
     // ===================以下もっと改良==========================
 
 //    public void doInPark() {
